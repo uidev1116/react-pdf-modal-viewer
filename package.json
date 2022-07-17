@@ -1,0 +1,52 @@
+{
+  "name": "react-pdf-viewer",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/react-pdf-viewer.umd.js",
+  "module": "./dist/react-pdf-viewer.js",
+  "exports": {
+    ".": {
+      "import": "./dist/react-pdf-viewer.js",
+      "require": "./dist/react-pdf-viewer.umd.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uidev1116/react-pdf-viewer"
+  },
+  "author": "uidev1116",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/eslint": "^8.4.5",
+    "@types/node": "^18.0.5",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "@vitejs/plugin-react": "^2.0.0",
+    "eslint": "^8.20.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-import-resolver-typescript": "^3.2.7",
+    "eslint-import-resolver-vite": "^1.0.3",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.0",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.0",
+    "vite-plugin-eslint": "^1.6.1"
+  },
+  "volta": {
+    "node": "16.16.0",
+    "npm": "8.11.0"
+  }
+}
