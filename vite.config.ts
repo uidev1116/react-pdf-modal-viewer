@@ -7,21 +7,21 @@ import eslint from 'vite-plugin-eslint'
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.tsx'),
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'ReactPDFViewer',
-      fileName: 'react-pdf-viewer'
+      fileName: 'react-pdf-viewer',
     },
     rollupOptions: {
       external: ['react'],
       output: {
         globals: {
-          react: 'React'
-        }
-      }
-    }
+          react: 'React',
+        },
+      },
+    },
   },
   server: {
-    open: '/examples/index.html'
+    open: '/examples/index.html',
   },
   plugins: [
     react(),
@@ -32,6 +32,6 @@ export default defineConfig({
       emitWarning: true,
       failOnError: true,
       fix: true,
-    })
-  ]
+    }),
+  ],
 })
