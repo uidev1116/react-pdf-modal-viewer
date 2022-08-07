@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve, dirname, join } from 'path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import eslint from 'vite-plugin-eslint'
@@ -31,7 +31,7 @@ export default defineConfig({
       emitError: true,
       emitWarning: true,
       failOnError: true,
-      fix: true,
+      fix: false,
     }),
   ],
 })

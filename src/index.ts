@@ -1,3 +1,10 @@
-import App from './App';
+import { pdfjs } from 'react-pdf'
 
-export default App;
+import { Viewer } from './components'
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker',
+  import.meta.url
+).toString()
+
+export { pdfjs, Viewer }
