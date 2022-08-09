@@ -13,7 +13,6 @@ interface ViewerProps {
 
 const Viewer = ({ file, options = {} }: ViewerProps) => {
   const [numPages, setNumPages] = useState<number | null>(null)
-  const [pageNumber] = useState(1)
 
   const onDocumentLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
@@ -30,11 +29,10 @@ const Viewer = ({ file, options = {} }: ViewerProps) => {
         options={options}
         onLoadSuccess={onDocumentLoadSuccess}
       >
-        <Page pageNumber={pageNumber} />
+        {Array.from(new Array(numPages), (el, index) => (
+          <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+        ))}
       </Document>
-      <p>
-        Page {pageNumber} of {numPages}
-      </p>
     </div>
   )
 }
