@@ -23,17 +23,37 @@ const Viewer = ({ file, options = {} }: ViewerProps) => {
   )
 
   return (
-    <div>
-      <Document
-        file={file}
-        options={options}
-        onLoadSuccess={onDocumentLoadSuccess}
-      >
-        {Array.from(new Array(numPages), (el, index) => (
-          <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-        ))}
-      </Document>
-    </div>
+    <Document
+      file={file}
+      options={options}
+      onLoadSuccess={onDocumentLoadSuccess}
+    >
+      <div className="pdf-viewer">
+        <div className="pdf-viewer__thumbnail">
+          {Array.from(new Array(numPages), (_, index) => (
+            <div>
+              <Page
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                width={150}
+                renderAnnotationLayer={false}
+                renderTextLayer={false}
+              />
+              <span>{index + 1}</span>
+            </div>
+          ))}
+        </div>
+        <div className="pdf-viewer__content">
+          {Array.from(new Array(numPages), (_, index) => (
+            <Page
+              key={`page_${index + 1}`}
+              pageNumber={index + 1}
+              renderAnnotationLayer={false}
+            />
+          ))}
+        </div>
+      </div>
+    </Document>
   )
 }
 
