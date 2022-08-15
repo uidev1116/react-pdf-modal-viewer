@@ -1,10 +1,17 @@
-.pdf-viewer {
+.pdf-viewer__overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
   display: grid;
-  grid-template: 100% / auto 1fr;
-  gap: 0 20px;
-  padding: 20px;
-  user-select: none;
+  place-items: center;
   background-color: rgba(0, 0, 0, 0.7);
+}
+
+.pdf-viewer__document {
+  /* empty block */
 }
 
 .pdf-viewer__thumbnail,

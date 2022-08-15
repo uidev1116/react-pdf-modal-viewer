@@ -43,9 +43,13 @@ module.exports = {
       {
         namedComponents: 'arrow-function',
         unnamedComponents: 'arrow-function',
-      }
+      },
     ],
-    'react/require-default-props': 'off'
+    'react/require-default-props': 'off',
+    'consistent-return': 'off',
+    /* 型定義にno-unused-varsのルールが適用される問題への対策*/
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error'],
   },
   settings: {
     'import/resolver': {
