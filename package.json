@@ -15,7 +15,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "npm run build:js && npm run build:css",
+    "build:js": "tsc && vite build",
     "build:scss": "sass --no-source-map --style=compressed scss/viewer.scss:css/pdf-viewer.css",
     "build:postcss": "postcss css/*.css -r",
     "build:css": "npm run build:scss && npm run build:postcss",
