@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Document, Page } from 'react-pdf'
 
@@ -14,13 +14,13 @@ import type {
 export interface ViewerProps {
   isOpen: boolean
   onClose: () => void
-  container: HTMLElement
+  container?: HTMLElement
   file: string | Uint8Array
   onAfterOpen?: () => void
   onAfterClose?: () => void
   onBackdropClick?: () => void
   id?: string
-  classNames: {
+  classNames?: {
     viewer?: string
     modal?: string
   }
@@ -34,9 +34,9 @@ const Viewer = ({
   isOpen,
   onClose = () => {},
   container = document.body,
-  onAfterOpen,
-  onAfterClose,
-  onBackdropClick,
+  onAfterOpen = () => {},
+  onAfterClose = () => {},
+  onBackdropClick = () => {},
   id,
   classNames = {
     viewer: 'pdf-viewer',
@@ -48,15 +48,26 @@ const Viewer = ({
   file,
   options = {},
 }: ViewerProps) => {
-  const ref = useRef<HTMLDivElement>(null)
   const [numPages, setNumPages] = useState<number | null>(null)
 
-  useFocusTrap(ref, {
+  const { setRef, activate, deactivate } = useFocusTrap({
     clickOutsideDeactivates: true,
     escapeDeactivates: true,
     returnFocusOnDeactivate: true,
     onDeactivate: onClose,
   })
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    activate()
+
+    return () => {
+      deactivate()
+    }
+  }, [isOpen])
 
   const onDocumentLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
@@ -73,7 +84,7 @@ const Viewer = ({
   return createPortal(
     <div className={classNames.viewer} tabIndex={-1} id={id}>
       <div
-        ref={ref}
+        ref={setRef}
         className={classNames.modal}
         role={role}
         aria-modal={ariaModal}
@@ -86,9 +97,8 @@ const Viewer = ({
         >
           <div className="pdf-viewer__thumbnail">
             {Array.from(new Array(numPages), (_, index) => (
-              <div>
+              <div key={`page_${index + 1}`}>
                 <Page
-                  key={`page_${index + 1}`}
                   pageNumber={index + 1}
                   width={150}
                   renderAnnotationLayer={false}
@@ -108,6 +118,8 @@ const Viewer = ({
             ))}
           </div>
         </Document>
+        <button type="button">ボタン</button>
+        <a href="http://example.com">リンク</a>
       </div>
     </div>,
     container

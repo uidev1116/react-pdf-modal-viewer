@@ -1,18 +1,12 @@
-import { RefObject, useEffect, useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { createFocusTrap } from 'focus-trap'
+
 import type {
   ActivateOptions,
   DeactivateOptions,
   FocusTrap,
   Options,
 } from 'focus-trap'
-
-export interface UseFocusTrapOptions extends Options {
-  /**
-   * Immediately activate the trap
-   */
-  immediate?: boolean
-}
 
 export interface UseFocusTrapReturn {
   /**
@@ -26,12 +20,17 @@ export interface UseFocusTrapReturn {
   isPaused: boolean
 
   /**
+   * set callback ref
+   */
+  setRef: (node: HTMLElement | null) => void
+
+  /**
    * Activate the focus trap
    *
    * @see https://github.com/focus-trap/focus-trap#trapactivateactivateoptions
    * @param opts Activate focus trap options
    */
-  activate: (opts?: ActivateOptions) => FocusTrap
+  activate: (opts?: ActivateOptions) => void
 
   /**
    * Deactivate the focus trap
@@ -39,32 +38,27 @@ export interface UseFocusTrapReturn {
    * @see https://github.com/focus-trap/focus-trap#trapdeactivatedeactivateoptions
    * @param opts Deactivate focus trap options
    */
-  deactivate: (opts?: DeactivateOptions) => FocusTrap
+  deactivate: (opts?: DeactivateOptions) => void
 
   /**
    * Pause the focus trap
    *
    * @see https://github.com/focus-trap/focus-trap#trappause
    */
-  pause: () => FocusTrap
+  pause: () => void
 
   /**
    * Unpauses the focus trap
    *
    * @see https://github.com/focus-trap/focus-trap#trapunpause
    */
-  unpause: () => FocusTrap
+  unpause: () => void
 }
 
-export const useFocusTrap = (
-  ref: RefObject<HTMLElement>,
-  options: UseFocusTrapOptions = {}
-) => {
+export const useFocusTrap = (options: Options = {}): UseFocusTrapReturn => {
   let trap: FocusTrap
 
-  const { immediate, ...focusTrapOptions } = options
-
-  const [isActive, setisActive] = useState(false)
+  const [isActive, setIsActive] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
 
   const activate = useCallback(
@@ -91,39 +85,32 @@ export const useFocusTrap = (
     }
   }, [])
 
-  useEffect(() => {
-    if (!ref.current) {
+  const setRef = useCallback((node: HTMLElement | null) => {
+    if (node === null) {
       return
     }
 
-    trap = createFocusTrap(ref.current, {
-      ...focusTrapOptions,
+    trap = createFocusTrap(node, {
+      ...options,
       onActivate() {
-        setisActive(true)
+        setIsActive(true)
         if (options.onActivate) {
           options.onActivate()
         }
       },
       onDeactivate() {
-        setisActive(false)
+        setIsActive(false)
         if (options.onDeactivate) {
           options.onDeactivate()
         }
       },
     })
-
-    if (immediate) {
-      trap.activate()
-    }
-
-    return () => {
-      trap.deactivate()
-    }
-  }, [ref])
+  }, [])
 
   return {
     isActive,
     isPaused,
+    setRef,
     activate,
     deactivate,
     pause,
