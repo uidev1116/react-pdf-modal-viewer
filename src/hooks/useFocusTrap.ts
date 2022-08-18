@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { createFocusTrap } from 'focus-trap'
 
 import type {
@@ -56,56 +56,59 @@ export interface UseFocusTrapReturn {
 }
 
 export const useFocusTrap = (options: Options = {}): UseFocusTrapReturn => {
-  let trap: FocusTrap
+  const trapRef = useRef<FocusTrap | null>(null)
 
   const [isActive, setIsActive] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
 
   const activate = useCallback(
-    (opts?: ActivateOptions) => trap?.activate(opts),
+    (opts?: ActivateOptions) => trapRef.current?.activate(opts),
     []
   )
 
   const deactivate = useCallback(
-    (opts?: DeactivateOptions) => trap?.deactivate(opts),
+    (opts?: DeactivateOptions) => trapRef.current?.deactivate(opts),
     []
   )
 
   const pause = useCallback(() => {
-    if (trap) {
-      trap.pause()
+    if (trapRef.current) {
+      trapRef.current.pause()
       setIsPaused(true)
     }
   }, [])
 
   const unpause = useCallback(() => {
-    if (trap) {
-      trap.unpause()
+    if (trapRef.current) {
+      trapRef.current.unpause()
       setIsPaused(false)
     }
   }, [])
 
-  const setRef = useCallback((node: HTMLElement | null) => {
-    if (node === null) {
-      return
-    }
+  const setRef = useCallback(
+    (node: HTMLElement | null) => {
+      if (node === null) {
+        return
+      }
 
-    trap = createFocusTrap(node, {
-      ...options,
-      onActivate() {
-        setIsActive(true)
-        if (options.onActivate) {
-          options.onActivate()
-        }
-      },
-      onDeactivate() {
-        setIsActive(false)
-        if (options.onDeactivate) {
-          options.onDeactivate()
-        }
-      },
-    })
-  }, [])
+      trapRef.current = createFocusTrap(node, {
+        ...options,
+        onActivate() {
+          setIsActive(true)
+          if (options.onActivate) {
+            options.onActivate()
+          }
+        },
+        onDeactivate() {
+          setIsActive(false)
+          if (options.onDeactivate) {
+            options.onDeactivate()
+          }
+        },
+      })
+    },
+    [options]
+  )
 
   return {
     isActive,

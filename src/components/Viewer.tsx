@@ -67,7 +67,7 @@ const Viewer = ({
     return () => {
       deactivate()
     }
-  }, [isOpen])
+  }, [isOpen, activate, deactivate])
 
   const onDocumentLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
