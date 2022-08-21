@@ -43,12 +43,9 @@ export const useBodyScrollLock = (): UseBodyScrollLockReturn => {
     }
   }, [])
 
-  useEffect(
-    () => () => {
-      clearAllBodyScrollLocks()
-    },
-    []
-  )
+  useEffect(() => () => {
+    clearAllBodyScrollLocks()
+  })
 
   const setRef = useCallback((node: HTMLElement | null) => {
     if (node === null) {
