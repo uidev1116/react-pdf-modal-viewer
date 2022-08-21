@@ -10,6 +10,16 @@
   background-color: rgba(0, 0, 0, 0.7);
 }
 
+.pdf-viewer__modal {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  bottom: 40px;
+  left: 40px;
+  overflow: auto;
+  border: 1px solid #ccc;
+}
+
 .pdf-viewer__thumbnail,
 .pdf-viewer__content {
   height: 100vh;

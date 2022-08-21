@@ -32,7 +32,7 @@ export default defineConfig({
       emitError: true,
       emitWarning: true,
       failOnError: true,
-      fix: false,
+      fix: true,
     }),
     stylelint({
       include: ['scss/*.scss'],

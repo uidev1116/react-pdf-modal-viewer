@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Document, Page } from 'react-pdf'
 
-import { useFocusTrap } from '../hooks/useFocusTrap'
+import { useBodyScrollLock, useFocusTrap } from '../hooks'
 
 /* eslint @typescript-eslint/no-unused-vars: 0 */
 
@@ -50,7 +50,13 @@ const Viewer = ({
 }: ViewerProps) => {
   const [numPages, setNumPages] = useState<number | null>(null)
 
-  const { setRef, activate, deactivate } = useFocusTrap({
+  const { setRef: setBodyScrollLockRef, disable, enable } = useBodyScrollLock()
+
+  const {
+    setRef: setTrapRef,
+    activate,
+    deactivate,
+  } = useFocusTrap({
     clickOutsideDeactivates: true,
     escapeDeactivates: true,
     returnFocusOnDeactivate: true,
@@ -58,16 +64,18 @@ const Viewer = ({
   })
 
   useEffect(() => {
-    if (!isOpen) {
-      return
-    }
-
-    activate()
-
-    return () => {
+    if (isOpen) {
+      if (preventScroll) {
+        disable()
+      }
+      activate()
+    } else {
+      if (preventScroll) {
+        enable()
+      }
       deactivate()
     }
-  }, [isOpen, activate, deactivate])
+  }, [isOpen, preventScroll, activate, deactivate, disable, enable])
 
   const onDocumentLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
@@ -84,7 +92,10 @@ const Viewer = ({
   return createPortal(
     <div className={classNames.viewer} tabIndex={-1} id={id}>
       <div
-        ref={setRef}
+        ref={(node) => {
+          setTrapRef(node)
+          setBodyScrollLockRef(node)
+        }}
         className={classNames.modal}
         role={role}
         aria-modal={ariaModal}
