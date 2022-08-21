@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { createFocusTrap } from 'focus-trap'
 
 import type {
@@ -109,6 +109,10 @@ export const useFocusTrap = (options: Options = {}): UseFocusTrapReturn => {
     },
     [options]
   )
+
+  useEffect(() => () => {
+    deactivate()
+  })
 
   return {
     isActive,
