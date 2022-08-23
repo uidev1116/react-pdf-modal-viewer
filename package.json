@@ -71,6 +71,7 @@
     "*.{js,ts,jsx,tsx}": "prettier --write"
   },
   "dependencies": {
+    "aria-hidden": "^1.2.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "focus-trap": "^6.9.4",
     "react-pdf": "^5.7.2"

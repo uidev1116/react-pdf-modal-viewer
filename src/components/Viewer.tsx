@@ -2,9 +2,10 @@ import { useState, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Document, Page } from 'react-pdf'
 
-import { useBodyScrollLock, useFocusTrap } from '../hooks'
+import { useBodyScrollLock, useFocusTrap, useAriaHidden } from '../hooks'
 
 /* eslint @typescript-eslint/no-unused-vars: 0 */
+/* eslint no-lonely-if: 0 */
 
 import type {
   PDFDocumentProxy,
@@ -63,19 +64,32 @@ const Viewer = ({
     onDeactivate: onClose,
   })
 
+  const { setRef: setAriaHiddenRef, hide, unhide } = useAriaHidden()
+
   useEffect(() => {
     if (isOpen) {
       if (preventScroll) {
         disable()
       }
       activate()
+      hide()
     } else {
       if (preventScroll) {
         enable()
       }
       deactivate()
+      unhide()
     }
-  }, [isOpen, preventScroll, activate, deactivate, disable, enable])
+  }, [
+    isOpen,
+    preventScroll,
+    disable,
+    enable,
+    activate,
+    deactivate,
+    hide,
+    unhide,
+  ])
 
   const onDocumentLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
@@ -93,8 +107,9 @@ const Viewer = ({
     <div className={classNames.viewer} tabIndex={-1} id={id}>
       <div
         ref={(node) => {
-          setTrapRef(node)
           setBodyScrollLockRef(node)
+          setTrapRef(node)
+          setAriaHiddenRef(node)
         }}
         className={classNames.modal}
         role={role}
