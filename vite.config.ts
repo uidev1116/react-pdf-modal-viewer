@@ -21,9 +21,6 @@ export default defineConfig({
       },
     },
   },
-  server: {
-    open: '/examples/index.html',
-  },
   plugins: [
     react(),
     eslint({

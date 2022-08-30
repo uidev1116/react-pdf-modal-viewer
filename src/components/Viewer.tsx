@@ -23,7 +23,11 @@ export interface ViewerProps {
   id?: string
   classNames?: {
     viewer?: string
+    backdrop?: string
     modal?: string
+    body?: string
+    thumbnail?: string
+    canvas?: string
   }
   role?: string
   preventScroll?: boolean
@@ -41,7 +45,11 @@ const Viewer = ({
   id,
   classNames = {
     viewer: 'pdf-viewer',
+    backdrop: 'pdf-viewer__backdrop',
     modal: 'pdf-viewer__modal',
+    body: 'pdf-viewer__body',
+    thumbnail: 'pdf-viewer__thumbnail',
+    canvas: 'pdf-viewer__canvas',
   },
   role = 'dialog',
   preventScroll = true,
@@ -104,48 +112,49 @@ const Viewer = ({
   }
 
   return createPortal(
-    <div className={classNames.viewer} tabIndex={-1} id={id}>
-      <div
-        ref={(node) => {
-          setBodyScrollLockRef(node)
-          setTrapRef(node)
-          setAriaHiddenRef(node)
-        }}
-        className={classNames.modal}
-        role={role}
-        aria-modal={ariaModal}
-      >
-        <Document
-          file={file}
-          options={options}
-          onLoadSuccess={onDocumentLoadSuccess}
-          className="pdf-viewer__document"
+    <div className={classNames.viewer} id={id}>
+      <div className={classNames.backdrop} tabIndex={-1}>
+        <div
+          ref={(node) => {
+            setBodyScrollLockRef(node)
+            setTrapRef(node)
+            setAriaHiddenRef(node)
+          }}
+          className={classNames.modal}
+          role={role}
+          aria-modal={ariaModal}
         >
-          <div className="pdf-viewer__thumbnail">
-            {Array.from(new Array(numPages), (_, index) => (
-              <div key={`page_${index + 1}`}>
+          <Document
+            file={file}
+            options={options}
+            onLoadSuccess={onDocumentLoadSuccess}
+            className={classNames.body}
+          >
+            <div className={classNames.thumbnail}>
+              {Array.from(new Array(numPages), (_, index) => (
+                <div key={`page_${index + 1}`}>
+                  <Page
+                    pageNumber={index + 1}
+                    width={150}
+                    renderAnnotationLayer={false}
+                    renderTextLayer={false}
+                  />
+                  <span>{index + 1}</span>
+                </div>
+              ))}
+            </div>
+            <div className={classNames.canvas}>
+              {Array.from(new Array(numPages), (_, index) => (
                 <Page
+                  key={`page_${index + 1}`}
                   pageNumber={index + 1}
-                  width={150}
                   renderAnnotationLayer={false}
-                  renderTextLayer={false}
                 />
-                <span>{index + 1}</span>
-              </div>
-            ))}
-          </div>
-          <div className="pdf-viewer__content">
-            {Array.from(new Array(numPages), (_, index) => (
-              <Page
-                key={`page_${index + 1}`}
-                pageNumber={index + 1}
-                renderAnnotationLayer={false}
-              />
-            ))}
-          </div>
-        </Document>
-        <button type="button">ボタン</button>
-        <a href="http://example.com">リンク</a>
+              ))}
+            </div>
+          </Document>
+          <button type="button">ボタン</button>
+        </div>
       </div>
     </div>,
     container

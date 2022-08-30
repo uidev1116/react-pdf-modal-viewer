@@ -1,4 +1,4 @@
-.pdf-viewer__overlay {
+.pdf-viewer__backdrop {
   position: fixed;
   top: 0;
   right: 0;
@@ -7,7 +7,7 @@
   z-index: 2;
   display: grid;
   place-items: center;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .pdf-viewer__modal {
@@ -16,18 +16,26 @@
   right: 40px;
   bottom: 40px;
   left: 40px;
+  padding: 20px;
   overflow: auto;
-  border: 1px solid #ccc;
+  background-color: #4d4d4d;
+  border-radius: 8px;
+}
+
+.pdf-viewer__body {
+  display: grid;
+  grid-template: auto / auto 1fr;
+  gap: 0 24px;
 }
 
 .pdf-viewer__thumbnail,
-.pdf-viewer__content {
+.pdf-viewer__canvas {
   height: 100vh;
   overflow: scroll;
   overflow-x: hidden;
 }
 
-.pdf-viewer__content {
+.pdf-viewer__canvas {
   display: grid;
   gap: 24px 0;
   place-items: center;
