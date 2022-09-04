@@ -127,7 +127,6 @@ const Viewer = ({
     <div className={classNames.viewer} id={id}>
       <div // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
         className={classNames.backdrop}
-        tabIndex={-1}
         onClick={handleBackDropClick}
       >
         <div
@@ -136,6 +135,7 @@ const Viewer = ({
             setTrapRef(node)
             setAriaHiddenRef(node)
           }}
+          tabIndex={-1}
           className={classNames.dialog}
           role={role}
           aria-modal={ariaModal}
@@ -161,11 +161,7 @@ const Viewer = ({
             </div>
             <div className={classNames.canvas}>
               {Array.from(new Array(numPages), (_, index) => (
-                <Page
-                  key={`page_${index + 1}`}
-                  pageNumber={index + 1}
-                  renderAnnotationLayer={false}
-                />
+                <Page key={`page_${index + 1}`} pageNumber={index + 1} />
               ))}
             </div>
           </Document>
