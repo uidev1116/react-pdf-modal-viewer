@@ -101,6 +101,16 @@ const Viewer = ({
     unhide,
   ])
 
+  const handleCloseBtnClick = () => {
+    onClose()
+    onAfterClose()
+  }
+
+  const handleBackDropClick = () => {
+    onBackdropClick()
+    onAfterClose()
+  }
+
   const onDocumentLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
     ({ numPages }: PDFDocumentProxy) => {
@@ -115,7 +125,11 @@ const Viewer = ({
 
   return createPortal(
     <div className={classNames.viewer} id={id}>
-      <div className={classNames.backdrop} tabIndex={-1}>
+      <div // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+        className={classNames.backdrop}
+        tabIndex={-1}
+        onClick={handleBackDropClick}
+      >
         <div
           ref={(node) => {
             setBodyScrollLockRef(node)
@@ -159,6 +173,7 @@ const Viewer = ({
             type="button"
             className={classNames.closeButton}
             aria-label="Close viewer"
+            onClick={handleCloseBtnClick}
           />
         </div>
       </div>

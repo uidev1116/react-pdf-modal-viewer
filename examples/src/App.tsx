@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { Viewer, pdfjs } from '../../src'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.js`
@@ -6,21 +6,18 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 const App = () => {
   const [isOpen, setIsOpen] = useState(false)
 
-  // const closeModal = useCallback(() => {
-  //   setIsOpen(false)
-  // }, [setIsOpen])
+  const closeModal = useCallback(() => {
+    setIsOpen(false)
+  }, [setIsOpen])
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={() => setIsOpen((prevState) => !prevState)}
-      >
+      <button type="button" onClick={() => setIsOpen(true)}>
         Open Viewer
       </button>
       <Viewer
         isOpen={isOpen}
-        onClose={() => {}}
+        onClose={closeModal}
         file="/examples/pdf/sample.pdf"
         options={{
           cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
