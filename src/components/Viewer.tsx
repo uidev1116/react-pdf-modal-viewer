@@ -24,10 +24,11 @@ export interface ViewerProps {
   classNames?: {
     viewer?: string
     backdrop?: string
-    modal?: string
+    dialog?: string
     body?: string
     thumbnail?: string
     canvas?: string
+    closeButton?: string
   }
   role?: string
   preventScroll?: boolean
@@ -46,10 +47,11 @@ const Viewer = ({
   classNames = {
     viewer: 'pdf-viewer',
     backdrop: 'pdf-viewer__backdrop',
-    modal: 'pdf-viewer__modal',
+    dialog: 'pdf-viewer__dialog',
     body: 'pdf-viewer__body',
     thumbnail: 'pdf-viewer__thumbnail',
     canvas: 'pdf-viewer__canvas',
+    closeButton: 'pdf-viewer__close-btn',
   },
   role = 'dialog',
   preventScroll = true,
@@ -120,7 +122,7 @@ const Viewer = ({
             setTrapRef(node)
             setAriaHiddenRef(node)
           }}
-          className={classNames.modal}
+          className={classNames.dialog}
           role={role}
           aria-modal={ariaModal}
         >
@@ -153,7 +155,11 @@ const Viewer = ({
               ))}
             </div>
           </Document>
-          <button type="button">ボタン</button>
+          <button
+            type="button"
+            className={classNames.closeButton}
+            aria-label="Close viewer"
+          />
         </div>
       </div>
     </div>,
