@@ -76,6 +76,15 @@ const Viewer = ({
 
   const { setRef: setAriaHiddenRef, hide, unhide } = useAriaHidden()
 
+  const setRefs = useCallback(
+    (node: HTMLElement | null) => {
+      setBodyScrollLockRef(node)
+      setTrapRef(node)
+      setAriaHiddenRef(node)
+    },
+    [setBodyScrollLockRef, setTrapRef, setAriaHiddenRef]
+  )
+
   useEffect(() => {
     if (isOpen) {
       if (preventScroll) {
@@ -130,11 +139,7 @@ const Viewer = ({
         onClick={handleBackDropClick}
       >
         <div
-          ref={(node) => {
-            setBodyScrollLockRef(node)
-            setTrapRef(node)
-            setAriaHiddenRef(node)
-          }}
+          ref={setRefs}
           tabIndex={-1}
           className={classNames.dialog}
           role={role}
