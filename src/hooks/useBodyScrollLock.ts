@@ -19,25 +19,25 @@ export interface UseBodyScrollLockReturn {
    * @see https://github.com/willmcpo/body-scroll-lock#options
    * @param opts Body scroll options
    */
-  disable: (opts?: BodyScrollOptions) => void
+  disableScroll: (opts?: BodyScrollOptions) => void
 
   /**
    * enable body element scroll
    *
    */
-  enable: () => void
+  enableScroll: () => void
 }
 
 export const useBodyScrollLock = (): UseBodyScrollLockReturn => {
   const targetRef = useRef<HTMLElement | null>(null)
 
-  const disable = useCallback((opts?: BodyScrollOptions) => {
+  const disableScroll = useCallback((opts?: BodyScrollOptions) => {
     if (targetRef.current) {
       disableBodyScroll(targetRef.current, opts)
     }
   }, [])
 
-  const enable = useCallback(() => {
+  const enableScroll = useCallback(() => {
     if (targetRef.current) {
       enableBodyScroll(targetRef.current)
     }
@@ -59,7 +59,7 @@ export const useBodyScrollLock = (): UseBodyScrollLockReturn => {
 
   return {
     setRef,
-    disable,
-    enable,
+    disableScroll,
+    enableScroll,
   }
 }

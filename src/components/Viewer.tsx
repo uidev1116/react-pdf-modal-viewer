@@ -61,7 +61,11 @@ const Viewer = ({
 }: ViewerProps) => {
   const [numPages, setNumPages] = useState<number | null>(null)
 
-  const { setRef: setBodyScrollLockRef, disable, enable } = useBodyScrollLock()
+  const {
+    setRef: setBodyScrollLockRef,
+    disableScroll,
+    enableScroll,
+  } = useBodyScrollLock()
 
   const {
     setRef: setTrapRef,
@@ -88,13 +92,13 @@ const Viewer = ({
   useEffect(() => {
     if (isOpen) {
       if (preventScroll) {
-        disable()
+        disableScroll()
       }
       activate()
       hide()
     } else {
       if (preventScroll) {
-        enable()
+        enableScroll()
       }
       deactivate()
       unhide()
@@ -102,8 +106,8 @@ const Viewer = ({
   }, [
     isOpen,
     preventScroll,
-    disable,
-    enable,
+    disableScroll,
+    enableScroll,
     activate,
     deactivate,
     hide,
