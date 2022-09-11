@@ -2,7 +2,12 @@ import { useState, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Document, Page } from 'react-pdf'
 
-import { useBodyScrollLock, useFocusTrap, useAriaHidden } from '../hooks'
+import {
+  useBodyScrollLock,
+  useFocusTrap,
+  useAriaHidden,
+  useFirstMountState,
+} from '../hooks'
 
 /* eslint @typescript-eslint/no-unused-vars: 0 */
 /* eslint no-lonely-if: 0 */
@@ -61,6 +66,8 @@ const Viewer = ({
 }: ViewerProps) => {
   const [numPages, setNumPages] = useState<number | null>(null)
 
+  const isFirstMount = useFirstMountState()
+
   const {
     setRef: setBodyScrollLockRef,
     disableScroll,
@@ -96,33 +103,32 @@ const Viewer = ({
       }
       activate()
       hide()
+      if (!isFirstMount) {
+        onAfterOpen()
+      }
     } else {
       if (preventScroll) {
         enableScroll()
       }
       deactivate()
       unhide()
+      if (!isFirstMount) {
+        onAfterClose()
+      }
     }
   }, [
     isOpen,
     preventScroll,
+    isFirstMount,
     disableScroll,
     enableScroll,
     activate,
     deactivate,
     hide,
     unhide,
+    onAfterOpen,
+    onAfterClose,
   ])
-
-  const handleCloseBtnClick = () => {
-    onClose()
-    onAfterClose()
-  }
-
-  const handleBackDropClick = () => {
-    onBackdropClick()
-    onAfterClose()
-  }
 
   const onDocumentLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
@@ -140,7 +146,7 @@ const Viewer = ({
     <div className={classNames.viewer} id={id}>
       <div // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
         className={classNames.backdrop}
-        onClick={handleBackDropClick}
+        onClick={onBackdropClick}
       >
         <div
           ref={setRefs}
@@ -178,7 +184,7 @@ const Viewer = ({
             type="button"
             className={classNames.closeButton}
             aria-label="Close viewer"
-            onClick={handleCloseBtnClick}
+            onClick={onClose}
           />
         </div>
       </div>

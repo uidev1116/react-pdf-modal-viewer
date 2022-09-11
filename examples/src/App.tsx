@@ -18,6 +18,13 @@ const App = () => {
       <Viewer
         isOpen={isOpen}
         onClose={closeModal}
+        onBackdropClick={closeModal}
+        onAfterOpen={() => {
+          console.log('after open')
+        }}
+        onAfterClose={() => {
+          console.log('after close')
+        }}
         file="/examples/pdf/sample.pdf"
         options={{
           cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
