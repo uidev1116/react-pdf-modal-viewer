@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Viewer, pdfjs } from '../../src'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.js`
@@ -8,6 +8,7 @@ const App = () => {
 
   const closeModal = useCallback(() => {
     setIsOpen(false)
+    console.log('close modal')
   }, [setIsOpen])
 
   return (
@@ -18,7 +19,9 @@ const App = () => {
       <Viewer
         isOpen={isOpen}
         onClose={closeModal}
-        onBackdropClick={closeModal}
+        onBackdropClick={() => {
+          console.log('backdrop clicked')
+        }}
         onAfterOpen={() => {
           console.log('after open')
         }}
@@ -30,6 +33,7 @@ const App = () => {
           cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
           cMapPacked: true,
         }}
+        id="hoge"
       />
     </div>
   )

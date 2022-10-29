@@ -28,7 +28,7 @@
   border-radius: 8px;
 }
 
-.pdf-viewer__body {
+.pdf-viewer__document {
   display: grid;
   grid-template: auto / auto 1fr;
   gap: 0 24px;
@@ -52,8 +52,12 @@
 .pdf-viewer__thumbnail {
   display: grid;
   row-gap: 24px;
-  color: #fff;
   text-align: center;
+}
+
+.pdf-viewer__thumbnail > a {
+  color: #fff;
+  text-decoration: none;
 }
 
 .pdf-viewer__close-btn {

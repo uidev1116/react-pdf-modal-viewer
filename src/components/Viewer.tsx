@@ -1,6 +1,7 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { Document, Page } from 'react-pdf'
+
+import PdfDocument from './PdfDocument'
 
 import {
   useBodyScrollLock,
@@ -12,10 +13,7 @@ import {
 /* eslint @typescript-eslint/no-unused-vars: 0 */
 /* eslint no-lonely-if: 0 */
 
-import type {
-  PDFDocumentProxy,
-  DocumentInitParameters,
-} from 'pdfjs-dist/types/src/display/api'
+import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api'
 
 export interface ViewerProps {
   isOpen: boolean
@@ -26,15 +24,13 @@ export interface ViewerProps {
   onAfterClose?: () => void
   onBackdropClick?: () => void
   id?: string
-  classNames?: {
-    viewer?: string
-    backdrop?: string
-    dialog?: string
-    body?: string
-    thumbnail?: string
-    canvas?: string
-    closeButton?: string
-  }
+  className?: string
+  backdropClassName?: string
+  dialogClassName?: string
+  documentClassName?: string
+  thumbnailClassName?: string
+  canvasClassName?: string
+  closeButtonClassName?: string
   role?: string
   preventScroll?: boolean
   ariaModal?: boolean | 'false' | 'true'
@@ -49,23 +45,19 @@ const Viewer = ({
   onAfterClose = () => {},
   onBackdropClick = () => {},
   id,
-  classNames = {
-    viewer: 'pdf-viewer',
-    backdrop: 'pdf-viewer__backdrop',
-    dialog: 'pdf-viewer__dialog',
-    body: 'pdf-viewer__body',
-    thumbnail: 'pdf-viewer__thumbnail',
-    canvas: 'pdf-viewer__canvas',
-    closeButton: 'pdf-viewer__close-btn',
-  },
+  className = 'pdf-viewer',
+  backdropClassName = 'pdf-viewer__backdrop',
+  dialogClassName = 'pdf-viewer__dialog',
+  documentClassName = 'pdf-viewer__document',
+  thumbnailClassName = 'pdf-viewer__thumbnail',
+  canvasClassName = 'pdf-viewer__canvas',
+  closeButtonClassName = 'pdf-viewer__close-btn',
   role = 'dialog',
   preventScroll = true,
   ariaModal = true,
   file,
   options = {},
 }: ViewerProps) => {
-  const [numPages, setNumPages] = useState<number | null>(null)
-
   const isFirstMount = useFirstMountState()
 
   const {
@@ -130,60 +122,34 @@ const Viewer = ({
     onAfterClose,
   ])
 
-  const onDocumentLoadSuccess = useCallback(
-    // eslint-disable-next-line no-shadow
-    ({ numPages }: PDFDocumentProxy) => {
-      setNumPages(numPages)
-    },
-    []
-  )
-
   if (!isOpen) {
     return null
   }
 
   return createPortal(
-    <div className={classNames.viewer} id={id}>
+    <div className={className} id={id}>
       <div // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-        className={classNames.backdrop}
+        className={backdropClassName}
         onClick={onBackdropClick}
       >
         <div
           ref={setRefs}
           tabIndex={-1}
-          className={classNames.dialog}
+          className={dialogClassName}
           role={role}
           aria-modal={ariaModal}
         >
-          <Document
+          <PdfDocument
             file={file}
             options={options}
-            onLoadSuccess={onDocumentLoadSuccess}
-            className={classNames.body}
-          >
-            <div className={classNames.thumbnail}>
-              {Array.from(new Array(numPages), (_, index) => (
-                <div key={`page_${index + 1}`}>
-                  <Page
-                    pageNumber={index + 1}
-                    width={150}
-                    renderAnnotationLayer={false}
-                    renderTextLayer={false}
-                  />
-                  <span>{index + 1}</span>
-                </div>
-              ))}
-            </div>
-            <div className={classNames.canvas}>
-              {Array.from(new Array(numPages), (_, index) => (
-                <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-              ))}
-            </div>
-          </Document>
+            className={documentClassName}
+            thumbnailClassName={thumbnailClassName}
+            canvasClassName={canvasClassName}
+          />
           <button
             type="button"
-            className={classNames.closeButton}
-            aria-label="Close viewer"
+            className={closeButtonClassName}
+            aria-label="Close Viewer"
             onClick={onClose}
           />
         </div>

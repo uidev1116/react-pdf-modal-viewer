@@ -28,7 +28,7 @@ export default defineConfig({
       exclude: ['/node_modules/'],
       emitError: true,
       emitWarning: true,
-      failOnError: true,
+      failOnError: false,
       fix: true,
     }),
     stylelint({
