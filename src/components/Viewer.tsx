@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
 import PdfDocument from './PdfDocument'
@@ -15,7 +15,7 @@ import {
 /* eslint @typescript-eslint/no-unused-vars: 0 */
 /* eslint no-lonely-if: 0 */
 
-import type { ReactNode } from 'react'
+import type { ReactNode, MouseEvent } from 'react'
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api'
 
 export interface ViewerProps {
@@ -25,7 +25,7 @@ export interface ViewerProps {
   file: string | Uint8Array
   onAfterOpen?: () => void
   onAfterClose?: () => void
-  onBackdropClick?: () => void
+  onBackdropClick?: (event: MouseEvent) => void
   id?: string
   className?: string
   backdropClassName?: string
@@ -72,7 +72,7 @@ const Viewer = ({
     activate,
     deactivate,
   } = useFocusTrap({
-    clickOutsideDeactivates: true,
+    allowOutsideClick: true, // falseの場合、Viewerを閉じてもFocusTrapが解除されないので注意
     escapeDeactivates: true,
     returnFocusOnDeactivate: true,
     onDeactivate: onClose,
@@ -123,6 +123,16 @@ const Viewer = ({
     onAfterClose,
   ])
 
+  const backdropRef = useRef<HTMLDivElement | null>(null)
+
+  const handleBackdropClick = (event: MouseEvent) => {
+    if (event.target !== backdropRef.current) {
+      // 内側をクリックした場合はは何もしない
+      return
+    }
+    onBackdropClick(event)
+  }
+
   if (!isOpen) {
     return null
   }
@@ -130,8 +140,9 @@ const Viewer = ({
   return createPortal(
     <div className={className} id={id}>
       <div // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+        ref={backdropRef}
         className={backdropClassName}
-        onClick={onBackdropClick}
+        onClick={handleBackdropClick}
       >
         <div
           ref={setRefs}

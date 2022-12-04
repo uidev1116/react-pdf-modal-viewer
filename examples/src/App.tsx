@@ -13,20 +13,27 @@ const App = () => {
 
   return (
     <div>
-      <button type="button" onClick={() => setIsOpen(true)}>
+      <button
+        type="button"
+        onClick={() => {
+          console.log('open button clicked!')
+          setIsOpen(true)
+        }}
+      >
         Open Viewer
       </button>
       <Viewer
         isOpen={isOpen}
         onClose={closeModal}
         onBackdropClick={() => {
-          console.log('backdrop clicked')
+          console.log('backdrop clicked!')
+          closeModal()
         }}
         onAfterOpen={() => {
-          console.log('after open')
+          console.log('after open!')
         }}
         onAfterClose={() => {
-          console.log('after close')
+          console.log('after close!')
         }}
         file="/examples/pdf/sample.pdf"
         options={{
