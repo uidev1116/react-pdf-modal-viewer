@@ -9,7 +9,7 @@ import type {
   DocumentInitParameters,
 } from 'pdfjs-dist/types/src/display/api'
 
-export interface PDFDocumentProps {
+export interface PdfDocumentProps {
   file: string | Uint8Array
   className?: string
   thumbnailClassName?: string
@@ -23,7 +23,7 @@ const PdfDocument = ({
   className = 'pdf-viewer__document',
   thumbnailClassName = 'pdf-viewer__thumnail',
   canvasClassName = 'pdf-viewer__canvas',
-}: PDFDocumentProps) => {
+}: PdfDocumentProps) => {
   const [numPages, setNumPages] = useState<number | null>(null)
 
   const onDocumentLoadSuccess = useCallback(
@@ -39,6 +39,7 @@ const PdfDocument = ({
   const handleInViewChange = (pageNumber: number) => {
     setInView(pageNumber)
   }
+
   return (
     <Document
       file={file}
