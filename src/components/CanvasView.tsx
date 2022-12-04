@@ -5,13 +5,13 @@ import Canvas from './Canvas'
 
 export interface CanvasViewProps {
   className?: string
-  numPages: number | null
+  numPages?: number
   onInViewChange?: (pageNumber: number) => void
 }
 
 const CanvasView = ({
-  className,
-  numPages,
+  className = 'pdf-viewer__canvas',
+  numPages = 1,
   onInViewChange = () => {},
 }: CanvasViewProps) => {
   const ref = useRef<HTMLDivElement | null>(null)

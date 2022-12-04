@@ -2,6 +2,8 @@ import { useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 
 import PdfDocument from './PdfDocument'
+import CanvasView from './CanvasView'
+import ThumbnailView from './ThumbnailView'
 
 import {
   useBodyScrollLock,
@@ -28,13 +30,12 @@ export interface ViewerProps {
   backdropClassName?: string
   dialogClassName?: string
   documentClassName?: string
-  thumbnailClassName?: string
-  canvasClassName?: string
   closeButtonClassName?: string
   role?: string
   preventScroll?: boolean
   ariaModal?: boolean | 'false' | 'true'
   options?: DocumentInitParameters
+  children?: React.ReactNode
 }
 
 const Viewer = ({
@@ -49,14 +50,13 @@ const Viewer = ({
   backdropClassName = 'pdf-viewer__backdrop',
   dialogClassName = 'pdf-viewer__dialog',
   documentClassName = 'pdf-viewer__document',
-  thumbnailClassName = 'pdf-viewer__thumbnail',
-  canvasClassName = 'pdf-viewer__canvas',
   closeButtonClassName = 'pdf-viewer__close-btn',
   role = 'dialog',
   preventScroll = true,
   ariaModal = true,
   file,
   options = {},
+  children,
 }: ViewerProps) => {
   const isFirstMount = useFirstMountState()
 
@@ -143,9 +143,9 @@ const Viewer = ({
             file={file}
             options={options}
             className={documentClassName}
-            thumbnailClassName={thumbnailClassName}
-            canvasClassName={canvasClassName}
-          />
+          >
+            {children}
+          </PdfDocument>
           <button
             type="button"
             className={closeButtonClassName}
@@ -158,5 +158,8 @@ const Viewer = ({
     container
   )
 }
+
+Viewer.Canvas = CanvasView
+Viewer.Thumbnail = ThumbnailView
 
 export default Viewer

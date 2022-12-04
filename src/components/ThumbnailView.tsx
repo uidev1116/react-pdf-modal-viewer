@@ -3,11 +3,15 @@ import { range } from '../utils'
 
 export interface ThumbnailViewProps {
   className?: string
-  numPages: number | null
-  inView: number | null
+  numPages?: number
+  inView?: number
 }
 
-const ThumbnailView = ({ className, numPages, inView }: ThumbnailViewProps) => (
+const ThumbnailView = ({
+  className = 'pdf-viewer__thumbnail',
+  numPages = 1,
+  inView = 1,
+}: ThumbnailViewProps) => (
   <div className={className}>
     {numPages &&
       range(1, numPages).map((index) => (

@@ -34,7 +34,10 @@ const App = () => {
           cMapPacked: true,
         }}
         id="hoge"
-      />
+      >
+        <Viewer.Thumbnail />
+        <Viewer.Canvas />
+      </Viewer>
     </div>
   )
 }

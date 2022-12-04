@@ -1,8 +1,11 @@
-import { useState, useCallback } from 'react'
+import {
+  useState,
+  useCallback,
+  Children,
+  cloneElement,
+  isValidElement,
+} from 'react'
 import { Document } from 'react-pdf'
-
-import CanvasView from './CanvasView'
-import ThumbnailView from './ThumbnailView'
 
 import type {
   PDFDocumentProxy,
@@ -12,6 +15,7 @@ import type {
 export interface PdfDocumentProps {
   file: string | Uint8Array
   className?: string
+  children?: React.ReactNode
   thumbnailClassName?: string
   canvasClassName?: string
   options?: DocumentInitParameters
@@ -20,9 +24,8 @@ export interface PdfDocumentProps {
 const PdfDocument = ({
   file,
   options = {},
+  children,
   className = 'pdf-viewer__document',
-  thumbnailClassName = 'pdf-viewer__thumnail',
-  canvasClassName = 'pdf-viewer__canvas',
 }: PdfDocumentProps) => {
   const [numPages, setNumPages] = useState<number | null>(null)
 
@@ -47,16 +50,16 @@ const PdfDocument = ({
       onLoadSuccess={onDocumentLoadSuccess}
       className={className}
     >
-      <ThumbnailView
-        className={thumbnailClassName}
-        numPages={numPages}
-        inView={inView}
-      />
-      <CanvasView
-        className={canvasClassName}
-        numPages={numPages}
-        onInViewChange={handleInViewChange}
-      />
+      {Children.map(
+        children,
+        (child) =>
+          isValidElement(child) &&
+          cloneElement(child as React.ReactElement, {
+            numPages,
+            inView,
+            onInViewChange: handleInViewChange,
+          })
+      )}
     </Document>
   )
 }
