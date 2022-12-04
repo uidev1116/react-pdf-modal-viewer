@@ -7,6 +7,7 @@ import {
 } from 'react'
 import { Document } from 'react-pdf'
 
+import type { ReactNode, ReactElement } from 'react'
 import type {
   PDFDocumentProxy,
   DocumentInitParameters,
@@ -15,9 +16,7 @@ import type {
 export interface PdfDocumentProps {
   file: string | Uint8Array
   className?: string
-  children?: React.ReactNode
-  thumbnailClassName?: string
-  canvasClassName?: string
+  children?: ReactNode
   options?: DocumentInitParameters
 }
 
@@ -54,7 +53,7 @@ const PdfDocument = ({
         children,
         (child) =>
           isValidElement(child) &&
-          cloneElement(child as React.ReactElement, {
+          cloneElement(child as ReactElement, {
             numPages,
             inView,
             onInViewChange: handleInViewChange,

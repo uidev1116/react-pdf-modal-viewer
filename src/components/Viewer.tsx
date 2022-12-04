@@ -15,6 +15,7 @@ import {
 /* eslint @typescript-eslint/no-unused-vars: 0 */
 /* eslint no-lonely-if: 0 */
 
+import type { ReactNode } from 'react'
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api'
 
 export interface ViewerProps {
@@ -35,7 +36,7 @@ export interface ViewerProps {
   preventScroll?: boolean
   ariaModal?: boolean | 'false' | 'true'
   options?: DocumentInitParameters
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 const Viewer = ({
