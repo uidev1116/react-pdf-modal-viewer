@@ -54,6 +54,14 @@ module.exports = {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
   },
+  overrides: [
+    {
+      files: ["src/hooks/**/*.ts"],
+      rules: {
+        "import/prefer-default-export": 'off'
+      }
+    }
+  ],
   settings: {
     'import/resolver': {
       vite: {},

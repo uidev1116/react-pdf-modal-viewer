@@ -1,13 +1,9 @@
-import {
-  useState,
-  useCallback,
-  Children,
-  cloneElement,
-  isValidElement,
-} from 'react'
+import { useCallback } from 'react'
 import { Document } from 'react-pdf'
 
-import type { ReactNode, ReactElement } from 'react'
+import { useViewer } from '../hooks'
+
+import type { ReactNode } from 'react'
 import type {
   PDFDocumentProxy,
   DocumentInitParameters,
@@ -26,21 +22,15 @@ const PdfDocument = ({
   children,
   className = 'pdf-viewer__document',
 }: PdfDocumentProps) => {
-  const [numPages, setNumPages] = useState<number | null>(null)
+  const { setNumPages } = useViewer()
 
   const onDocumentLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
     ({ numPages }: PDFDocumentProxy) => {
       setNumPages(numPages)
     },
-    []
+    [setNumPages]
   )
-
-  const [inView, setInView] = useState<number | null>(null)
-
-  const handleInViewChange = (pageNumber: number) => {
-    setInView(pageNumber)
-  }
 
   return (
     <Document
@@ -49,7 +39,7 @@ const PdfDocument = ({
       onLoadSuccess={onDocumentLoadSuccess}
       className={className}
     >
-      {Children.map(
+      {/* {Children.map(
         children,
         (child) =>
           isValidElement(child) &&
@@ -58,7 +48,8 @@ const PdfDocument = ({
             inView,
             onInViewChange: handleInViewChange,
           })
-      )}
+      )} */}
+      {children}
     </Document>
   )
 }

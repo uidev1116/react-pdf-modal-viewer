@@ -1,19 +1,15 @@
 import { useRef } from 'react'
 
+import { useViewer } from '../hooks'
 import { range } from '../utils'
 import Canvas from './Canvas'
 
 export interface CanvasViewProps {
   className?: string
-  numPages?: number
-  onInViewChange?: (pageNumber: number) => void
 }
 
-const CanvasView = ({
-  className = 'pdf-viewer__canvas',
-  numPages = 1,
-  onInViewChange = () => {},
-}: CanvasViewProps) => {
+const CanvasView = ({ className = 'pdf-viewer__canvas' }: CanvasViewProps) => {
+  const { numPages, setInView } = useViewer()
   const ref = useRef<HTMLDivElement | null>(null)
 
   return (
@@ -25,7 +21,7 @@ const CanvasView = ({
             key={`canvas_${pageNumber}`}
             pageNumber={pageNumber}
             onInViewChange={() => {
-              onInViewChange(pageNumber)
+              setInView(pageNumber)
             }}
           />
         ))}

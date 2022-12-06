@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
+import { ViewerProvider } from '../providers'
 import PdfDocument from './PdfDocument'
 import CanvasView from './CanvasView'
 import ThumbnailView from './ThumbnailView'
@@ -25,7 +26,7 @@ export interface ViewerProps {
   file: string | Uint8Array
   onAfterOpen?: () => void
   onAfterClose?: () => void
-  onBackdropClick?: (event: MouseEvent) => void
+  onBackdropClick?: (event?: MouseEvent) => void
   id?: string
   className?: string
   backdropClassName?: string
@@ -138,35 +139,37 @@ const Viewer = ({
   }
 
   return createPortal(
-    <div className={className} id={id}>
-      <div // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-        ref={backdropRef}
-        className={backdropClassName}
-        onClick={handleBackdropClick}
-      >
-        <div
-          ref={setRefs}
-          tabIndex={-1}
-          className={dialogClassName}
-          role={role}
-          aria-modal={ariaModal}
+    <ViewerProvider>
+      <div className={className} id={id}>
+        <div // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+          ref={backdropRef}
+          className={backdropClassName}
+          onClick={handleBackdropClick}
         >
-          <PdfDocument
-            file={file}
-            options={options}
-            className={documentClassName}
+          <div
+            ref={setRefs}
+            tabIndex={-1}
+            className={dialogClassName}
+            role={role}
+            aria-modal={ariaModal}
           >
-            {children}
-          </PdfDocument>
-          <button
-            type="button"
-            className={closeButtonClassName}
-            aria-label="Close Viewer"
-            onClick={onClose}
-          />
+            <PdfDocument
+              file={file}
+              options={options}
+              className={documentClassName}
+            >
+              {children}
+            </PdfDocument>
+            <button
+              type="button"
+              className={closeButtonClassName}
+              aria-label="Close Viewer"
+              onClick={onClose}
+            />
+          </div>
         </div>
       </div>
-    </div>,
+    </ViewerProvider>,
     container
   )
 }
