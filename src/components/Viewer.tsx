@@ -17,9 +17,11 @@ import {
 /* eslint no-lonely-if: 0 */
 
 import type { ReactNode, MouseEvent } from 'react'
+import type { DocumentProps } from 'react-pdf'
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api'
 
-export interface ViewerProps {
+export interface ViewerProps
+  extends Pick<DocumentProps, 'error' | 'loading' | 'noData'> {
   isOpen: boolean
   onClose: () => void
   container?: HTMLElement
@@ -53,6 +55,9 @@ const Viewer = ({
   dialogClassName = 'pdf-viewer__dialog',
   documentClassName = 'pdf-viewer__document',
   closeButtonClassName = 'pdf-viewer__close-btn',
+  error,
+  loading,
+  noData,
   role = 'dialog',
   preventScroll = true,
   ariaModal = true,
@@ -157,6 +162,9 @@ const Viewer = ({
               file={file}
               options={options}
               className={documentClassName}
+              error={error}
+              loading={loading}
+              noData={noData}
             >
               {children}
             </PdfDocument>

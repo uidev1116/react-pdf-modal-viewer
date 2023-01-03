@@ -9,22 +9,28 @@ import type {
   DocumentInitParameters,
 } from 'pdfjs-dist/types/src/display/api'
 
-export interface PdfDocumentProps {
+import type { ViewerProps } from './Viewer'
+
+export interface PdfDocumentProps
+  extends Pick<ViewerProps, 'error' | 'loading' | 'noData'> {
   file: string | Uint8Array
   className?: string
-  children?: ReactNode
   options?: DocumentInitParameters
+  children?: ReactNode
 }
 
 const PdfDocument = ({
   file,
   options = {},
-  children,
   className = 'pdf-viewer__document',
+  error,
+  loading,
+  noData,
+  children,
 }: PdfDocumentProps) => {
   const { setNumPages } = useViewer()
 
-  const onDocumentLoadSuccess = useCallback(
+  const handleLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
     ({ numPages }: PDFDocumentProxy) => {
       setNumPages(numPages)
@@ -36,19 +42,12 @@ const PdfDocument = ({
     <Document
       file={file}
       options={options}
-      onLoadSuccess={onDocumentLoadSuccess}
+      onLoadSuccess={handleLoadSuccess}
       className={className}
+      error={error}
+      loading={loading}
+      noData={noData}
     >
-      {/* {Children.map(
-        children,
-        (child) =>
-          isValidElement(child) &&
-          cloneElement(child as ReactElement, {
-            numPages,
-            inView,
-            onInViewChange: handleInViewChange,
-          })
-      )} */}
       {children}
     </Document>
   )

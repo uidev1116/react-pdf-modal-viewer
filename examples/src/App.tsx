@@ -41,6 +41,9 @@ const App = () => {
           cMapPacked: true,
         }}
         id="hoge"
+        error={<div>An error occurred!</div>}
+        loading={<div>Please wait!</div>}
+        noData={<div>Please select a page.</div>}
       >
         <Viewer.Thumbnail />
         <Viewer.Canvas />
