@@ -47,6 +47,10 @@ const App = () => {
       >
         <Viewer.Thumbnail />
         <Viewer.Canvas />
+        <Viewer.Toolbar>
+          <Viewer.Toolbar.Download />
+          <Viewer.Toolbar.Download />
+        </Viewer.Toolbar>
       </Viewer>
     </div>
   )

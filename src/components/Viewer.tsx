@@ -5,6 +5,7 @@ import { ViewerProvider } from '../providers'
 import PdfDocument from './PdfDocument'
 import CanvasView from './CanvasView'
 import ThumbnailView from './ThumbnailView'
+import Toolbar from './Toolbar/Toolbar'
 
 import {
   useBodyScrollLock,
@@ -25,7 +26,7 @@ export interface ViewerProps
   isOpen: boolean
   onClose: () => void
   container?: HTMLElement
-  file: string | Uint8Array
+  file: string
   onAfterOpen?: () => void
   onAfterClose?: () => void
   onBackdropClick?: (event?: MouseEvent) => void
@@ -144,7 +145,7 @@ const Viewer = ({
   }
 
   return createPortal(
-    <ViewerProvider>
+    <ViewerProvider file={file}>
       <div className={className} id={id}>
         <div // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
           ref={backdropRef}
@@ -159,7 +160,6 @@ const Viewer = ({
             aria-modal={ariaModal}
           >
             <PdfDocument
-              file={file}
               options={options}
               className={documentClassName}
               error={error}
@@ -184,5 +184,6 @@ const Viewer = ({
 
 Viewer.Canvas = CanvasView
 Viewer.Thumbnail = ThumbnailView
+Viewer.Toolbar = Toolbar
 
 export default Viewer

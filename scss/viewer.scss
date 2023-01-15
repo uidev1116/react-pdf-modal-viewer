@@ -29,8 +29,12 @@
 }
 
 .pdf-viewer__document {
-  display: flex;
-  gap: 0 24px;
+  display: grid;
+  grid-template:
+    'thumbnail canvas ' auto
+    'toolbar   toolbar' auto /
+    auto 1fr;
+  gap: 8px 24px;
   height: 100%;
   min-height: 100%;
   overflow: hidden;
@@ -44,13 +48,14 @@
 
 .pdf-viewer__canvas {
   display: grid;
+  grid-area: canvas;
   row-gap: 24px;
   justify-content: center;
-  width: 100%;
 }
 
 .pdf-viewer__thumbnail {
   display: grid;
+  grid-area: thumbnail;
   row-gap: 24px;
   text-align: center;
 }
@@ -78,4 +83,32 @@
   border: none;
   outline: none;
   appearance: none;
+}
+
+.pdf-viewer__toolbar {
+  display: grid;
+  grid-area: toolbar;
+  grid-auto-flow: column;
+  column-gap: 12px;
+  justify-content: end;
+}
+
+.pdf-viewer__toolbar > * {
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+}
+
+.pdf-viewer__icon-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  background-color: transparent;
+  background-image: url("../images/icon-download.svg");
+  background-repeat: no-repeat;
+  background-position: center;
 }

@@ -9,16 +9,12 @@ import type { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api'
 import type { ViewerProps } from './Viewer'
 
 export interface PdfDocumentProps
-  extends Pick<
-    ViewerProps,
-    'file' | 'options' | 'error' | 'loading' | 'noData'
-  > {
+  extends Pick<ViewerProps, 'options' | 'error' | 'loading' | 'noData'> {
   className?: string
   children?: ReactNode
 }
 
 const PdfDocument = ({
-  file,
   options = {},
   className = 'pdf-viewer__document',
   error,
@@ -26,7 +22,7 @@ const PdfDocument = ({
   noData,
   children,
 }: PdfDocumentProps) => {
-  const { setNumPages } = useViewer()
+  const { file, setNumPages } = useViewer()
 
   const handleLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
