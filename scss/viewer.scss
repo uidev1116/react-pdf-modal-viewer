@@ -93,20 +93,22 @@
   justify-content: end;
 }
 
-.pdf-viewer__toolbar > * {
+.pdf-viewer__action {
   box-sizing: border-box;
-  width: 36px;
-  height: 36px;
-  padding: 8px;
 }
 
-.pdf-viewer__icon-download {
+.pdf-viewer__action > * {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.pdf-viewer__icon-download {
+  display: inline-block;
   width: 20px;
   height: 20px;
-  cursor: pointer;
   background-color: transparent;
   background-image: url("../images/icon-download.svg");
   background-repeat: no-repeat;
