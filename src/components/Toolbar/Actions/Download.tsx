@@ -3,20 +3,18 @@ import { useViewer } from '../../../hooks'
 interface DownloadProps {
   className?: string
   iconClassName?: string
-  aria?: {
-    label: string
-  }
+  ariaLabel: string
 }
 
 const Download = ({
   className = 'pdf-viewer__download',
   iconClassName = 'pdf-viewer__icon-download',
-  aria = { label: 'Download PDF' },
+  ariaLabel = 'Download PDF',
 }: DownloadProps) => {
   const { file } = useViewer()
 
   return (
-    <a href={file} download className={className} aria-label={aria.label}>
+    <a href={file} download className={className} aria-label={ariaLabel}>
       <span className={iconClassName} />
     </a>
   )
