@@ -49,6 +49,7 @@ module.exports = {
       },
     ],
     'react/require-default-props': 'off',
+    'react/jsx-props-no-spreading': 'off',
     'consistent-return': 'off',
     /* 型定義にno-unused-varsのルールが適用される問題への対策*/
     'no-unused-vars': 'off',

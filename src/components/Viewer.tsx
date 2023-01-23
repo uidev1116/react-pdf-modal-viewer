@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
 import { ViewerProvider } from '../providers'
 import PdfDocument from './PdfDocument'
 import CanvasView from './CanvasView'
 import ThumbnailView from './ThumbnailView'
-import Toolbar from './Toolbar/Toolbar'
+import { Toolbar } from './Toolbar'
 
 import {
   useBodyScrollLock,
@@ -36,15 +36,16 @@ export interface ViewerProps
   dialogClassName?: string
   documentClassName?: string
   closeButtonClassName?: string
-  role?: string
   preventScroll?: boolean
+  closeTimeout?: number
+  role?: string
   ariaModal?: boolean | 'false' | 'true'
   options?: DocumentInitParameters
   children?: ReactNode
 }
 
 const Viewer = ({
-  isOpen,
+  isOpen: _isOpen,
   onClose = () => {},
   container = document.body,
   onAfterOpen = () => {},
@@ -59,15 +60,14 @@ const Viewer = ({
   error,
   loading,
   noData,
-  role = 'dialog',
   preventScroll = true,
+  closeTimeout = 0,
+  role = 'dialog',
   ariaModal = true,
   file,
   options = {},
   children,
 }: ViewerProps) => {
-  const isFirstMount = useFirstMountState()
-
   const {
     setRef: setBodyScrollLockRef,
     disableScroll,
@@ -96,8 +96,14 @@ const Viewer = ({
     [setBodyScrollLockRef, setTrapRef, setAriaHiddenRef]
   )
 
+  const isFirstMount = useFirstMountState()
+  const [isOpen, setIsOpen] = useState(false)
+  const [afterOpen, setAfterOpen] = useState(false)
+  const [beforeClose, setBeforeClose] = useState(false)
+
   useEffect(() => {
-    if (isOpen) {
+    if (_isOpen) {
+      setIsOpen(true)
       if (preventScroll) {
         disableScroll()
       }
@@ -107,6 +113,9 @@ const Viewer = ({
         onAfterOpen()
       }
     } else {
+      if (!isFirstMount) {
+        setBeforeClose(true)
+      }
       if (preventScroll) {
         enableScroll()
       }
@@ -117,7 +126,7 @@ const Viewer = ({
       }
     }
   }, [
-    isOpen,
+    _isOpen,
     preventScroll,
     isFirstMount,
     disableScroll,
@@ -130,7 +139,25 @@ const Viewer = ({
     onAfterClose,
   ])
 
-  const backdropRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (isOpen) {
+      requestAnimationFrame(() => {
+        setAfterOpen(true)
+      })
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (beforeClose) {
+      setTimeout(() => {
+        setIsOpen(false)
+        setBeforeClose(false)
+        setAfterOpen(false)
+      }, closeTimeout)
+    }
+  }, [beforeClose, closeTimeout])
+
+  const backdropRef = useRef<HTMLDivElement>(null)
 
   const handleBackdropClick = (event: MouseEvent) => {
     if (event.target !== backdropRef.current) {
@@ -140,25 +167,40 @@ const Viewer = ({
     onBackdropClick(event)
   }
 
-  if (!isOpen) {
+  const buildClassName = (): string => {
+    let appliedClassName = className
+    if (afterOpen) {
+      appliedClassName = `${className} ${className}--after-open`
+    }
+
+    if (beforeClose) {
+      appliedClassName = `${className} ${className}--before-close`
+    }
+
+    return appliedClassName
+  }
+
+  const shouldBeClosed = () => !isOpen && !beforeClose
+
+  if (shouldBeClosed()) {
     return null
   }
 
   return createPortal(
-    <ViewerProvider file={file}>
-      <div className={className} id={id}>
-        <div // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-          ref={backdropRef}
-          className={backdropClassName}
-          onClick={handleBackdropClick}
+    <div className={buildClassName()} id={id}>
+      <div // eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+        ref={backdropRef}
+        className={backdropClassName}
+        onClick={handleBackdropClick}
+      >
+        <div
+          ref={setRefs}
+          tabIndex={-1}
+          className={dialogClassName}
+          role={role}
+          aria-modal={ariaModal}
         >
-          <div
-            ref={setRefs}
-            tabIndex={-1}
-            className={dialogClassName}
-            role={role}
-            aria-modal={ariaModal}
-          >
+          <ViewerProvider file={file}>
             <PdfDocument
               options={options}
               className={documentClassName}
@@ -168,16 +210,16 @@ const Viewer = ({
             >
               {children}
             </PdfDocument>
-            <button
-              type="button"
-              className={closeButtonClassName}
-              aria-label="Close Viewer"
-              onClick={onClose}
-            />
-          </div>
+          </ViewerProvider>
+          <button
+            type="button"
+            className={closeButtonClassName}
+            aria-label="Close Viewer"
+            onClick={onClose}
+          />
         </div>
       </div>
-    </ViewerProvider>,
+    </div>,
     container
   )
 }

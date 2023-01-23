@@ -22,6 +22,7 @@ const App = () => {
       >
         Open Viewer
       </button>
+
       <Viewer
         isOpen={isOpen}
         onClose={closeModal}
