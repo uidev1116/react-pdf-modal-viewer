@@ -3,7 +3,7 @@ import { useViewer } from '../../../hooks'
 interface DownloadProps {
   className?: string
   iconClassName?: string
-  ariaLabel: string
+  ariaLabel?: string
 }
 
 const Download = ({
