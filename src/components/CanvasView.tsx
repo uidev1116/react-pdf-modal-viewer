@@ -10,7 +10,7 @@ export interface CanvasViewProps {
 
 const CanvasView = ({ className = 'pdf-viewer__canvas' }: CanvasViewProps) => {
   const { numPages, setInView } = useViewer()
-  const ref = useRef<HTMLDivElement | null>(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   return (
     <div ref={ref} className={className}>

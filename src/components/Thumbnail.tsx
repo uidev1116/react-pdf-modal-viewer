@@ -7,7 +7,7 @@ export interface ThumbnailProps {
 }
 
 const Thumbnail = ({ pageNumber, isInView }: ThumbnailProps) => {
-  const ref = useRef<HTMLAnchorElement | null>(null)
+  const ref = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     if (isInView) {

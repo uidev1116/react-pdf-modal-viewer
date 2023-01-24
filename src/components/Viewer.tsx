@@ -1,8 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
-import { ViewerProvider } from '../providers'
-import PdfDocument from './PdfDocument'
+import ViewerCore from './ViewerCore'
 import CanvasView from './CanvasView'
 import ThumbnailView from './ThumbnailView'
 import { Toolbar } from './Toolbar'
@@ -34,7 +33,7 @@ export interface ViewerProps
   className?: string
   backdropClassName?: string
   dialogClassName?: string
-  documentClassName?: string
+  bodyClassName?: string
   closeButtonClassName?: string
   preventScroll?: boolean
   closeTimeout?: number
@@ -55,7 +54,7 @@ const Viewer = ({
   className = 'pdf-viewer',
   backdropClassName = 'pdf-viewer__backdrop',
   dialogClassName = 'pdf-viewer__dialog',
-  documentClassName = 'pdf-viewer__document',
+  bodyClassName = 'pdf-viewer__body',
   closeButtonClassName = 'pdf-viewer__close-btn',
   error,
   loading,
@@ -200,17 +199,16 @@ const Viewer = ({
           role={role}
           aria-modal={ariaModal}
         >
-          <ViewerProvider file={file}>
-            <PdfDocument
-              options={options}
-              className={documentClassName}
-              error={error}
-              loading={loading}
-              noData={noData}
-            >
-              {children}
-            </PdfDocument>
-          </ViewerProvider>
+          <ViewerCore
+            file={file}
+            className={bodyClassName}
+            options={options}
+            error={error}
+            loading={loading}
+            noData={noData}
+          >
+            {children}
+          </ViewerCore>
           <button
             type="button"
             className={closeButtonClassName}
