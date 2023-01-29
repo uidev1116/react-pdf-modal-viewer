@@ -16,7 +16,7 @@ import {
 /* eslint @typescript-eslint/no-unused-vars: 0 */
 /* eslint no-lonely-if: 0 */
 
-import type { ReactNode, MouseEvent } from 'react'
+import type { ReactNode, MouseEvent, KeyboardEvent } from 'react'
 import type { DocumentProps } from 'react-pdf'
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api'
 
@@ -28,8 +28,8 @@ export interface ViewerProps
   file: string
   onAfterOpen?: () => void
   onAfterClose?: () => void
-  onBackdropClick?: (event?: MouseEvent) => void
   shouldCloseOnBackdropClick?: boolean
+  shouldCloseOnEsc?: boolean
   id?: string
   className?: string
   backdropClassName?: string
@@ -50,8 +50,8 @@ const Viewer = ({
   container = document.body,
   onAfterOpen = () => {},
   onAfterClose = () => {},
-  onBackdropClick = () => {},
   shouldCloseOnBackdropClick = true,
+  shouldCloseOnEsc = true,
   id,
   className = 'pdf-viewer',
   backdropClassName = 'pdf-viewer__backdrop',
@@ -77,23 +77,14 @@ const Viewer = ({
 
   const { setRef: setAriaHiddenRef, hide, unhide } = useAriaHidden()
 
-  const handleFocusTrapDeactivate = useCallback(() => {
-    if (preventScroll) {
-      enableScroll()
-    }
-    unhide()
-    onClose()
-  }, [preventScroll, enableScroll, unhide, onClose])
-
   const {
     setRef: setTrapRef,
     activate,
     deactivate,
   } = useFocusTrap({
     allowOutsideClick: true, // falseの場合、Viewerを閉じてもFocusTrapが解除されないので注意
-    escapeDeactivates: true,
+    escapeDeactivates: false, // ESCキーを押したときの動作は自前でカスタマイズしたいのでfalse
     returnFocusOnDeactivate: true,
-    onDeactivate: handleFocusTrapDeactivate,
   })
 
   const setRefs = useCallback(
@@ -105,17 +96,14 @@ const Viewer = ({
     [setBodyScrollLockRef, setTrapRef, setAriaHiddenRef]
   )
 
-  const close = useCallback(
-    (closeFn = () => {}) => {
-      if (preventScroll) {
-        enableScroll()
-      }
-      deactivate()
-      unhide()
-      closeFn()
-    },
-    [preventScroll, enableScroll, deactivate, unhide]
-  )
+  const close = useCallback(() => {
+    if (preventScroll) {
+      enableScroll()
+    }
+    deactivate()
+    unhide()
+    onClose()
+  }, [preventScroll, enableScroll, deactivate, unhide, onClose])
 
   const isFirstMount = useFirstMountState()
   const [modalState, setModalState] = useState({
@@ -167,8 +155,8 @@ const Viewer = ({
   }, [modalState.afterOpen, preventScroll, disableScroll, activate, hide])
 
   const handleClick = useCallback(() => {
-    close(onClose)
-  }, [close, onClose])
+    close()
+  }, [close])
 
   const backdropRef = useRef<HTMLDivElement>(null)
 
@@ -179,10 +167,20 @@ const Viewer = ({
         return
       }
       if (shouldCloseOnBackdropClick) {
-        close(() => onBackdropClick(event))
+        close()
       }
     },
-    [shouldCloseOnBackdropClick, close, onBackdropClick]
+    [shouldCloseOnBackdropClick, close]
+  )
+
+  const handleKeydown = useCallback(
+    (event: KeyboardEvent) => {
+      if (shouldCloseOnEsc && event.code === 'Escape') {
+        event.stopPropagation()
+        close()
+      }
+    },
+    [shouldCloseOnEsc, close]
   )
 
   const buildClassName = (): string => {
@@ -213,12 +211,13 @@ const Viewer = ({
         className={backdropClassName}
         onClick={handleBackdropClick}
       >
-        <div
+        <div // eslint-disable-line jsx-a11y/no-static-element-interactions
           ref={setRefs}
           tabIndex={-1}
           className={dialogClassName}
           role={role}
           aria-modal={ariaModal}
+          onKeyDown={handleKeydown}
         >
           <ViewerCore
             file={file}

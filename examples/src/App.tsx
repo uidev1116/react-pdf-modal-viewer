@@ -26,10 +26,6 @@ const App = () => {
       <Viewer
         isOpen={isOpen}
         onClose={closeModal}
-        onBackdropClick={(event) => {
-          console.log('backdrop clicked!', event)
-          closeModal()
-        }}
         onAfterOpen={() => {
           console.log('after open!')
         }}
