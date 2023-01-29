@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useCallback, useRef, useEffect } from 'react'
 import { createFocusTrap } from 'focus-trap'
 
 import type {
@@ -9,16 +9,6 @@ import type {
 } from 'focus-trap'
 
 export interface UseFocusTrapReturn {
-  /**
-   * Indicates if the focus trap is currently active
-   */
-  isActive: boolean
-
-  /**
-   * Indicates if the focus trap is currently paused
-   */
-  isPaused: boolean
-
   /**
    * set callback ref
    */
@@ -58,30 +48,23 @@ export interface UseFocusTrapReturn {
 export const useFocusTrap = (options: Options = {}): UseFocusTrapReturn => {
   const trapRef = useRef<FocusTrap | null>(null)
 
-  const [isActive, setIsActive] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
+  const activate = useCallback((opts?: ActivateOptions) => {
+    trapRef.current?.activate(opts)
+  }, [])
 
-  const activate = useCallback(
-    (opts?: ActivateOptions) => trapRef.current?.activate(opts),
-    []
-  )
-
-  const deactivate = useCallback(
-    (opts?: DeactivateOptions) => trapRef.current?.deactivate(opts),
-    []
-  )
+  const deactivate = useCallback((opts?: DeactivateOptions) => {
+    trapRef.current?.deactivate(opts)
+  }, [])
 
   const pause = useCallback(() => {
     if (trapRef.current) {
       trapRef.current.pause()
-      setIsPaused(true)
     }
   }, [])
 
   const unpause = useCallback(() => {
     if (trapRef.current) {
       trapRef.current.unpause()
-      setIsPaused(false)
     }
   }, [])
 
@@ -91,32 +74,19 @@ export const useFocusTrap = (options: Options = {}): UseFocusTrapReturn => {
         return
       }
 
-      trapRef.current = createFocusTrap(node, {
-        ...options,
-        onActivate() {
-          setIsActive(true)
-          if (options.onActivate) {
-            options.onActivate()
-          }
-        },
-        onDeactivate() {
-          setIsActive(false)
-          if (options.onDeactivate) {
-            options.onDeactivate()
-          }
-        },
-      })
+      trapRef.current = createFocusTrap(node, options)
     },
-    [options]
+    [options] // eslint-disable-line
   )
 
-  useEffect(() => () => {
-    deactivate()
-  })
+  useEffect(
+    () => () => {
+      deactivate()
+    },
+    [] // eslint-disable-line react-hooks/exhaustive-deps
+  )
 
   return {
-    isActive,
-    isPaused,
     setRef,
     activate,
     deactivate,

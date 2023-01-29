@@ -29,6 +29,7 @@ export interface ViewerProps
   onAfterOpen?: () => void
   onAfterClose?: () => void
   onBackdropClick?: (event?: MouseEvent) => void
+  shouldCloseOnBackdropClick?: boolean
   id?: string
   className?: string
   backdropClassName?: string
@@ -44,12 +45,13 @@ export interface ViewerProps
 }
 
 const Viewer = ({
-  isOpen: _isOpen,
+  isOpen,
   onClose = () => {},
   container = document.body,
   onAfterOpen = () => {},
   onAfterClose = () => {},
   onBackdropClick = () => {},
+  shouldCloseOnBackdropClick = true,
   id,
   className = 'pdf-viewer',
   backdropClassName = 'pdf-viewer__backdrop',
@@ -73,6 +75,16 @@ const Viewer = ({
     enableScroll,
   } = useBodyScrollLock()
 
+  const { setRef: setAriaHiddenRef, hide, unhide } = useAriaHidden()
+
+  const handleFocusTrapDeactivate = useCallback(() => {
+    if (preventScroll) {
+      enableScroll()
+    }
+    unhide()
+    onClose()
+  }, [preventScroll, enableScroll, unhide, onClose])
+
   const {
     setRef: setTrapRef,
     activate,
@@ -81,10 +93,8 @@ const Viewer = ({
     allowOutsideClick: true, // falseの場合、Viewerを閉じてもFocusTrapが解除されないので注意
     escapeDeactivates: true,
     returnFocusOnDeactivate: true,
-    onDeactivate: onClose,
+    onDeactivate: handleFocusTrapDeactivate,
   })
-
-  const { setRef: setAriaHiddenRef, hide, unhide } = useAriaHidden()
 
   const setRefs = useCallback(
     (node: HTMLElement | null) => {
@@ -95,91 +105,102 @@ const Viewer = ({
     [setBodyScrollLockRef, setTrapRef, setAriaHiddenRef]
   )
 
-  const isFirstMount = useFirstMountState()
-  const [isOpen, setIsOpen] = useState(false)
-  const [afterOpen, setAfterOpen] = useState(false)
-  const [beforeClose, setBeforeClose] = useState(false)
-
-  useEffect(() => {
-    if (_isOpen) {
-      setIsOpen(true)
-      if (preventScroll) {
-        disableScroll()
-      }
-      activate()
-      hide()
-      if (!isFirstMount) {
-        onAfterOpen()
-      }
-    } else {
-      if (!isFirstMount) {
-        setBeforeClose(true)
-      }
+  const close = useCallback(
+    (closeFn = () => {}) => {
       if (preventScroll) {
         enableScroll()
       }
       deactivate()
       unhide()
-      if (!isFirstMount) {
-        onAfterClose()
-      }
-    }
-  }, [
-    _isOpen,
-    preventScroll,
-    isFirstMount,
-    disableScroll,
-    enableScroll,
-    activate,
-    deactivate,
-    hide,
-    unhide,
-    onAfterOpen,
-    onAfterClose,
-  ])
+      closeFn()
+    },
+    [preventScroll, enableScroll, deactivate, unhide]
+  )
+
+  const isFirstMount = useFirstMountState()
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    beforeClose: false,
+    afterOpen: false,
+  })
 
   useEffect(() => {
     if (isOpen) {
-      requestAnimationFrame(() => {
-        setAfterOpen(true)
-      })
+      setModalState((prevState) => ({ ...prevState, isOpen: true }))
+    } else if (!isFirstMount) {
+      setModalState((prevState) => ({ ...prevState, beforeClose: true }))
     }
-  }, [isOpen])
+  }, [isOpen, isFirstMount])
 
   useEffect(() => {
-    if (beforeClose) {
+    if (modalState.isOpen) {
+      requestAnimationFrame(() => {
+        setModalState((prevState) => ({ ...prevState, afterOpen: true }))
+        if (isOpen) {
+          onAfterOpen()
+        }
+      })
+    }
+  }, [modalState.isOpen, isOpen, onAfterOpen])
+
+  useEffect(() => {
+    if (modalState.beforeClose) {
       setTimeout(() => {
-        setIsOpen(false)
-        setBeforeClose(false)
-        setAfterOpen(false)
+        setModalState({
+          isOpen: false,
+          beforeClose: false,
+          afterOpen: false,
+        })
+        onAfterClose()
       }, closeTimeout)
     }
-  }, [beforeClose, closeTimeout])
+  }, [modalState.beforeClose, onAfterClose, closeTimeout])
+
+  useEffect(() => {
+    if (modalState.afterOpen) {
+      if (preventScroll) {
+        disableScroll()
+      }
+      activate()
+      hide()
+    }
+  }, [modalState.afterOpen, preventScroll, disableScroll, activate, hide])
+
+  const handleClick = useCallback(() => {
+    close(onClose)
+  }, [close, onClose])
 
   const backdropRef = useRef<HTMLDivElement>(null)
 
-  const handleBackdropClick = (event: MouseEvent) => {
-    if (event.target !== backdropRef.current) {
-      // 内側をクリックした場合はは何もしない
-      return
-    }
-    onBackdropClick(event)
-  }
+  const handleBackdropClick = useCallback(
+    (event: MouseEvent) => {
+      if (event.target !== backdropRef.current) {
+        // 内側をクリックした場合はは何もしない
+        return
+      }
+      if (shouldCloseOnBackdropClick) {
+        close(() => onBackdropClick(event))
+      }
+    },
+    [shouldCloseOnBackdropClick, close, onBackdropClick]
+  )
 
   const buildClassName = (): string => {
-    let appliedClassName = className
+    const { afterOpen, beforeClose } = modalState
+    let result = className
+
     if (afterOpen) {
-      appliedClassName = `${className} ${className}--after-open`
+      result = `${className} ${className}--after-open`
     }
 
     if (beforeClose) {
-      appliedClassName = `${className} ${className}--before-close`
+      result = `${className} ${className}--before-close`
     }
 
-    return appliedClassName
+    return result
   }
 
-  const shouldBeClosed = () => !isOpen && !beforeClose
+  const shouldBeClosed = () => !modalState.isOpen && !modalState.beforeClose
 
   if (shouldBeClosed()) {
     return null
@@ -213,7 +234,7 @@ const Viewer = ({
             type="button"
             className={closeButtonClassName}
             aria-label="Close Viewer"
-            onClick={onClose}
+            onClick={handleClick}
           />
         </div>
       </div>

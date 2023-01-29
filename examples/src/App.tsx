@@ -26,8 +26,8 @@ const App = () => {
       <Viewer
         isOpen={isOpen}
         onClose={closeModal}
-        onBackdropClick={() => {
-          console.log('backdrop clicked!')
+        onBackdropClick={(event) => {
+          console.log('backdrop clicked!', event)
           closeModal()
         }}
         onAfterOpen={() => {
@@ -53,6 +53,9 @@ const App = () => {
           <Viewer.Toolbar.Download />
         </Viewer.Toolbar>
       </Viewer>
+      <a href="#">テスト</a>
+      <a href="#">テスト</a>
+      <a href="#">テスト</a>
     </div>
   )
 }
