@@ -121,19 +121,27 @@ const Viewer = ({
   }, [isOpen, isFirstMount])
 
   useEffect(() => {
+    let animationFrame: number
     if (modalState.isOpen) {
-      requestAnimationFrame(() => {
+      animationFrame = window.requestAnimationFrame(() => {
         setModalState((prevState) => ({ ...prevState, afterOpen: true }))
         if (isOpen) {
           onAfterOpen()
         }
       })
     }
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame)
+      }
+    }
   }, [modalState.isOpen, isOpen, onAfterOpen])
 
   useEffect(() => {
+    let timeoutId: number
     if (modalState.beforeClose) {
-      setTimeout(() => {
+      timeoutId = window.setTimeout(() => {
         setModalState({
           isOpen: false,
           beforeClose: false,
@@ -141,6 +149,12 @@ const Viewer = ({
         })
         onAfterClose()
       }, closeTimeout)
+    }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
     }
   }, [modalState.beforeClose, onAfterClose, closeTimeout])
 
@@ -163,7 +177,7 @@ const Viewer = ({
   const handleBackdropClick = useCallback(
     (event: MouseEvent) => {
       if (event.target !== backdropRef.current) {
-        // 内側をクリックした場合はは何もしない
+        // 内側をクリックした場合は何もしない
         return
       }
       if (shouldCloseOnBackdropClick) {

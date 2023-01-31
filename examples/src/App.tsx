@@ -49,9 +49,9 @@ const App = () => {
           <Viewer.Toolbar.Download />
         </Viewer.Toolbar>
       </Viewer>
-      <a href="#">テスト</a>
-      <a href="#">テスト</a>
-      <a href="#">テスト</a>
+      <button type="button">FocusTrapテスト</button>
+      <button type="button">FocusTrapテスト</button>
+      <button type="button">FocusTrapテスト</button>
     </div>
   )
 }
