@@ -1,12 +1,21 @@
 import { useEffect, useRef } from 'react'
 import { Page } from 'react-pdf'
 
-export interface ThumbnailProps {
+import type { ThumbnailViewProps } from './ThumbnailView'
+
+export interface ThumbnailProps
+  extends Pick<ThumbnailViewProps, 'error' | 'loading' | 'noData'> {
   pageNumber: number
   isInView: boolean
 }
 
-const Thumbnail = ({ pageNumber, isInView }: ThumbnailProps) => {
+const Thumbnail = ({
+  pageNumber,
+  isInView,
+  error,
+  loading,
+  noData,
+}: ThumbnailProps) => {
   const ref = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
@@ -22,6 +31,9 @@ const Thumbnail = ({ pageNumber, isInView }: ThumbnailProps) => {
         width={150}
         renderAnnotationLayer={false}
         renderTextLayer={false}
+        error={error}
+        loading={loading}
+        noData={noData}
       />
       <span>{pageNumber}</span>
     </a>

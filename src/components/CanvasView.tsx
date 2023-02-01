@@ -1,14 +1,22 @@
 import { useRef } from 'react'
 
+import type { PageProps } from 'react-pdf'
+
 import { useViewer } from '../hooks'
 import { range } from '../utils'
 import Canvas from './Canvas'
 
-export interface CanvasViewProps {
+export interface CanvasViewProps
+  extends Pick<PageProps, 'error' | 'loading' | 'noData'> {
   className?: string
 }
 
-const CanvasView = ({ className = 'pdf-viewer__canvas' }: CanvasViewProps) => {
+const CanvasView = ({
+  className = 'pdf-viewer__canvas',
+  error,
+  loading,
+  noData,
+}: CanvasViewProps) => {
   const { numPages, setInView } = useViewer()
   const ref = useRef<HTMLDivElement>(null)
 
@@ -17,12 +25,15 @@ const CanvasView = ({ className = 'pdf-viewer__canvas' }: CanvasViewProps) => {
       {numPages &&
         range(1, numPages).map((pageNumber) => (
           <Canvas
-            inViewRoot={ref.current}
             key={`canvas_${pageNumber}`}
             pageNumber={pageNumber}
+            inViewRoot={ref.current}
             onInViewChange={() => {
               setInView(pageNumber)
             }}
+            error={error}
+            loading={loading}
+            noData={noData}
           />
         ))}
     </div>

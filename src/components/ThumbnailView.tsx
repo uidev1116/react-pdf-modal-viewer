@@ -2,12 +2,18 @@ import Thumbnail from './Thumbnail'
 import { useViewer } from '../hooks'
 import { range } from '../utils'
 
-export interface ThumbnailViewProps {
+import type { PageProps } from 'react-pdf'
+
+export interface ThumbnailViewProps
+  extends Pick<PageProps, 'error' | 'loading' | 'noData'> {
   className?: string
 }
 
 const ThumbnailView = ({
   className = 'pdf-viewer__thumbnail',
+  error,
+  loading,
+  noData,
 }: ThumbnailViewProps) => {
   const { numPages, inView } = useViewer()
 
@@ -19,6 +25,9 @@ const ThumbnailView = ({
             key={`thumbnail_${index}`}
             pageNumber={index}
             isInView={inView === index}
+            error={error}
+            loading={loading}
+            noData={noData}
           />
         ))}
     </div>
