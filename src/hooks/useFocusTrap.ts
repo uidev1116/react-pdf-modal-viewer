@@ -1,4 +1,4 @@
-import { useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { createFocusTrap } from 'focus-trap'
 
 import type {
@@ -9,6 +9,16 @@ import type {
 } from 'focus-trap'
 
 export interface UseFocusTrapReturn {
+  /**
+   * Indicates if the focus trap is currently active
+   */
+  isActive: boolean
+
+  /**
+   * Indicates if the focus trap is currently paused
+   */
+  isPaused: boolean
+
   /**
    * set callback ref
    */
@@ -48,6 +58,9 @@ export interface UseFocusTrapReturn {
 export const useFocusTrap = (options: Options = {}): UseFocusTrapReturn => {
   const trapRef = useRef<FocusTrap | null>(null)
 
+  const [isActive, setIsActive] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+
   const activate = useCallback((opts?: ActivateOptions) => {
     trapRef.current?.activate(opts)
   }, [])
@@ -59,12 +72,14 @@ export const useFocusTrap = (options: Options = {}): UseFocusTrapReturn => {
   const pause = useCallback(() => {
     if (trapRef.current) {
       trapRef.current.pause()
+      setIsPaused(true)
     }
   }, [])
 
   const unpause = useCallback(() => {
     if (trapRef.current) {
       trapRef.current.unpause()
+      setIsPaused(false)
     }
   }, [])
 
@@ -74,19 +89,39 @@ export const useFocusTrap = (options: Options = {}): UseFocusTrapReturn => {
         return
       }
 
-      trapRef.current = createFocusTrap(node, options)
+      if (trapRef.current) {
+        return trapRef.current.updateContainerElements(node)
+      }
+
+      trapRef.current = createFocusTrap(node, {
+        ...options,
+        onActivate() {
+          setIsActive(true)
+          if (options.onActivate) {
+            options.onActivate()
+          }
+        },
+        onDeactivate() {
+          setIsActive(false)
+          if (options.onDeactivate) {
+            options.onDeactivate()
+          }
+        },
+      })
     },
-    [options] // eslint-disable-line
+    [options]
   )
 
   useEffect(
     () => () => {
       deactivate()
     },
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    [deactivate]
   )
 
   return {
+    isActive,
+    isPaused,
     setRef,
     activate,
     deactivate,
