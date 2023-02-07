@@ -1,4 +1,4 @@
-import { Download } from './Actions'
+import { Download, ZoomIn, ZoomOut } from './Actions'
 
 import { Children, cloneElement, isValidElement } from 'react'
 
@@ -26,5 +26,7 @@ const Toolbar = ({
 )
 
 Toolbar.Download = Download
+Toolbar.ZoomIn = ZoomIn
+Toolbar.ZoomOut = ZoomOut
 
 export default Toolbar

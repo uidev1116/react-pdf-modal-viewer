@@ -45,7 +45,8 @@ const App = () => {
         <Viewer.Thumbnail />
         <Viewer.Canvas />
         <Viewer.Toolbar>
-          <Viewer.Toolbar.Download />
+          <Viewer.Toolbar.ZoomIn />
+          <Viewer.Toolbar.ZoomOut />
           <Viewer.Toolbar.Download />
         </Viewer.Toolbar>
       </Viewer>

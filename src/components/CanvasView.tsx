@@ -17,7 +17,7 @@ const CanvasView = ({
   loading,
   noData,
 }: CanvasViewProps) => {
-  const { numPages, setInView } = useViewer()
+  const { numPages, setInView, scale } = useViewer()
   const ref = useRef<HTMLDivElement>(null)
 
   return (
@@ -31,6 +31,7 @@ const CanvasView = ({
             onInViewChange={() => {
               setInView(pageNumber)
             }}
+            scale={scale}
             error={error}
             loading={loading}
             noData={noData}

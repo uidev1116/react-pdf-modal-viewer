@@ -28,6 +28,7 @@ const ViewerCore = ({
 }: ViewerCoreProps) => {
   const [numPages, setNumPages] = useState<number | null>(null)
   const [inView, setInView] = useState<number | null>(null)
+  const [scale, setScale] = useState<number>(1.0)
 
   const handleLoadSuccess = useCallback(
     // eslint-disable-next-line no-shadow
@@ -43,6 +44,8 @@ const ViewerCore = ({
       numPages={numPages}
       inView={inView}
       setInView={setInView}
+      scale={scale}
+      setScale={setScale}
     >
       <Document
         file={file}
