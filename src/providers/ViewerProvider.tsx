@@ -6,7 +6,7 @@ import { ViewerProps } from '../components/Viewer'
 export interface ViewerContextInterface extends Pick<ViewerProps, 'file'> {
   numPages: number | null
   inView: number | null
-  setInView: Dispatch<SetStateAction<number>>
+  setInView: Dispatch<SetStateAction<number | null>>
   scale: number
   setScale: Dispatch<SetStateAction<number>>
 }
