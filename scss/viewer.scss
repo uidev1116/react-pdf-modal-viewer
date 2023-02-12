@@ -63,9 +63,14 @@
   text-align: center;
 }
 
-.pdf-viewer__thumbnail > a {
+.pdf-viewer__thumbnail > button {
+  padding: 0;
   color: #fff;
   text-decoration: none;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  appearance: none;
 }
 
 .pdf-viewer__close-btn {
@@ -111,6 +116,7 @@
   cursor: pointer;
   background-color: transparent;
   border: none;
+  appearance: none;
 }
 
 [class^="pdf-viewer__icon-"] {

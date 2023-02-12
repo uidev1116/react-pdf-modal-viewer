@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import { Page } from 'react-pdf'
+import { scrollTo } from '../utils'
 
 import type { ThumbnailViewProps } from './ThumbnailView'
 
@@ -16,16 +17,20 @@ const Thumbnail = ({
   loading,
   noData,
 }: ThumbnailProps) => {
-  const ref = useRef<HTMLAnchorElement>(null)
+  const ref = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    if (isInView) {
-      ref.current?.scrollIntoView()
+    if (isInView && ref.current) {
+      scrollTo(ref.current)
     }
   }, [isInView])
 
+  const handleClick = useCallback(() => {
+    scrollTo(`#page-${pageNumber}`)
+  }, [pageNumber])
+
   return (
-    <a ref={ref} href={`#page-${pageNumber}`}>
+    <button ref={ref} type="button" onClick={handleClick}>
       <Page
         pageNumber={pageNumber}
         width={150}
@@ -36,7 +41,7 @@ const Thumbnail = ({
         noData={noData}
       />
       <span>{pageNumber}</span>
-    </a>
+    </button>
   )
 }
 
