@@ -1,12 +1,15 @@
 import { useCallback } from 'react'
 import { useViewer } from '../../../hooks'
 
+import type { ReactNode } from 'react'
+
 interface ZoomInProps {
   className?: string
   iconClassName?: string
   ariaLabel?: string
   step?: number
   max?: number
+  children?: ReactNode
 }
 
 const ZoomIn = ({
@@ -15,6 +18,7 @@ const ZoomIn = ({
   ariaLabel = 'Zoom in PDF',
   step = 0.1,
   max = 2.0,
+  children,
 }: ZoomInProps) => {
   const { setScale } = useViewer()
 
@@ -29,7 +33,7 @@ const ZoomIn = ({
       aria-label={ariaLabel}
       onClick={handleClick}
     >
-      <span className={iconClassName} />
+      {children || <span className={iconClassName} />}
     </button>
   )
 }
