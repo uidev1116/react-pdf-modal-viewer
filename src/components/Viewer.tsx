@@ -13,9 +13,6 @@ import {
   useFirstMountState,
 } from '../hooks'
 
-/* eslint @typescript-eslint/no-unused-vars: 0 */
-/* eslint no-lonely-if: 0 */
-
 import type { ReactNode, MouseEvent, KeyboardEvent } from 'react'
 import type { DocumentProps } from 'react-pdf'
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api'
