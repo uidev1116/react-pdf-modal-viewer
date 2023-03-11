@@ -15,6 +15,7 @@ const App = () => {
     <div>
       <button
         type="button"
+        className="btn btn-primary"
         onClick={() => {
           console.log('open button clicked!')
           setIsOpen(true)
@@ -39,7 +40,14 @@ const App = () => {
         }}
         id="hoge"
         error={<div>An error occurred!</div>}
-        loading={<div>Please wait!</div>}
+        loading={
+          <div
+            className="spinner-border text-light position-absolute top-0 start-0 end-0 bottom-0 m-auto"
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        }
         noData={<div>Please select a page.</div>}
       >
         <Viewer.Thumbnail />
@@ -50,9 +58,15 @@ const App = () => {
           <Viewer.Toolbar.Download />
         </Viewer.Toolbar>
       </Viewer>
-      <button type="button">FocusTrapテスト</button>
-      <button type="button">FocusTrapテスト</button>
-      <button type="button">FocusTrapテスト</button>
+      <button type="button" className="btn btn-primary">
+        FocusTrapテスト
+      </button>
+      <button type="button" className="btn btn-primary">
+        FocusTrapテスト
+      </button>
+      <button type="button" className="btn btn-primary">
+        FocusTrapテスト
+      </button>
     </div>
   )
 }
