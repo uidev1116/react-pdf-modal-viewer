@@ -94,13 +94,8 @@ const Viewer = ({
   )
 
   const close = useCallback(() => {
-    if (preventScroll) {
-      enableScroll()
-    }
-    deactivate()
-    unhide()
     onClose()
-  }, [preventScroll, enableScroll, deactivate, unhide, onClose])
+  }, [onClose])
 
   const isFirstMount = useFirstMountState()
   const [modalState, setModalState] = useState({
@@ -126,6 +121,12 @@ const Viewer = ({
           onAfterOpen()
         }
       })
+    } else if (!isFirstMount) {
+      if (preventScroll) {
+        enableScroll()
+      }
+      deactivate()
+      unhide()
     }
 
     return () => {
@@ -133,7 +134,16 @@ const Viewer = ({
         cancelAnimationFrame(animationFrame)
       }
     }
-  }, [modalState.isOpen, isOpen, onAfterOpen])
+  }, [
+    modalState.isOpen,
+    isOpen,
+    onAfterOpen,
+    isFirstMount,
+    preventScroll,
+    enableScroll,
+    deactivate,
+    unhide,
+  ])
 
   useEffect(() => {
     let timeoutId: number
