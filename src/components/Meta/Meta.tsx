@@ -1,0 +1,38 @@
+import { isValidElement } from 'react'
+import { useViewer } from '../../hooks'
+
+import type { ReactNode } from 'react'
+import { Meta as MetaType } from '../../types/meta'
+
+export interface MetaProps {
+  className?: string
+  render?: (meta: MetaType) => ReactNode
+}
+
+const Meta = ({ className = 'pdf-viewer__meta', render }: MetaProps) => {
+  const { meta } = useViewer()
+
+  const renderFileSize = () => {
+    const { fileSize } = meta
+
+    if (fileSize.mb) {
+      return `${(+fileSize.mb.toPrecision(3)).toLocaleString()} MB`
+    }
+    if (fileSize.kb) {
+      return `${(+fileSize.kb.toPrecision(3)).toLocaleString()} KB`
+    }
+    return `${fileSize.b.toLocaleString()} B`
+  }
+
+  return (
+    <div className={className}>
+      {typeof render === 'function' && isValidElement(render(meta)) ? (
+        render(meta)
+      ) : (
+        <span>{`${meta.fileName}（${renderFileSize()}）`}</span>
+      )}
+    </div>
+  )
+}
+
+export default Meta

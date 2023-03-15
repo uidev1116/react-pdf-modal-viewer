@@ -50,6 +50,7 @@ const App = () => {
         }
         noData={<div>Please select a page.</div>}
       >
+        <Viewer.Meta />
         <Viewer.Thumbnail />
         <Viewer.Canvas />
         <Viewer.Toolbar>

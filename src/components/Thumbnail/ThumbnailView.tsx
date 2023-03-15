@@ -1,6 +1,6 @@
 import Thumbnail from './Thumbnail'
-import { useViewer } from '../hooks'
-import { range } from '../utils'
+import { useViewer } from '../../hooks'
+import { range } from '../../utils'
 
 import type { PageProps } from 'react-pdf'
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react'
 import { Page } from 'react-pdf'
-import { scrollTo } from '../utils'
+import { scrollTo } from '../../utils'
 
 import type { ThumbnailViewProps } from './ThumbnailView'
 

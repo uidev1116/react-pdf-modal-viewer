@@ -35,6 +35,7 @@
 .pdf-viewer__body {
   display: grid;
   grid-template:
+    'meta      meta   ' auto
     'thumbnail canvas ' auto
     'toolbar   toolbar' auto /
     auto 1fr;
@@ -47,6 +48,11 @@
 .pdf-viewer__thumbnail,
 .pdf-viewer__canvas {
   overflow: scroll;
+}
+
+.pdf-viewer__meta {
+  grid-area: meta;
+  color: #fff;
 }
 
 .pdf-viewer__canvas {

@@ -2,8 +2,8 @@ import { useRef } from 'react'
 
 import type { PageProps } from 'react-pdf'
 
-import { useViewer } from '../hooks'
-import { range } from '../utils'
+import { useViewer } from '../../hooks'
+import { range } from '../../utils'
 import Canvas from './Canvas'
 
 export interface CanvasViewProps

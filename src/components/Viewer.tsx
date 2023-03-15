@@ -2,9 +2,10 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
 import ViewerCore from './ViewerCore'
-import CanvasView from './CanvasView'
-import ThumbnailView from './ThumbnailView'
+import { Canvas } from './Canvas' // eslint-disable-line
+import { Thumbnail } from './Thumbnail'
 import { Toolbar } from './Toolbar'
+import { Meta } from './Meta'
 
 import {
   useBodyScrollLock,
@@ -263,8 +264,9 @@ const Viewer = ({
   )
 }
 
-Viewer.Canvas = CanvasView
-Viewer.Thumbnail = ThumbnailView
+Viewer.Canvas = Canvas
+Viewer.Thumbnail = Thumbnail
+Viewer.Meta = Meta
 Viewer.Toolbar = Toolbar
 
 export default Viewer
