@@ -6,10 +6,10 @@ import { Meta as MetaType } from '../../types/meta'
 
 export interface MetaProps {
   className?: string
-  render?: (meta: MetaType) => ReactNode
+  custom?: (meta: MetaType) => ReactNode
 }
 
-const Meta = ({ className = 'pdf-viewer__meta', render }: MetaProps) => {
+const Meta = ({ className = 'pdf-viewer__meta', custom }: MetaProps) => {
   const { meta } = useViewer()
 
   const renderFileSize = () => {
@@ -26,8 +26,8 @@ const Meta = ({ className = 'pdf-viewer__meta', render }: MetaProps) => {
 
   return (
     <div className={className}>
-      {typeof render === 'function' && isValidElement(render(meta)) ? (
-        render(meta)
+      {typeof custom === 'function' && isValidElement(custom(meta)) ? (
+        custom(meta)
       ) : (
         <span>{`${meta.fileName}（${renderFileSize()}）`}</span>
       )}
