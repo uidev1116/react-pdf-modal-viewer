@@ -1,6 +1,6 @@
-import { useRef } from 'react'
+import { useRef, useCallback, useState } from 'react'
 
-import type { PageProps } from 'react-pdf'
+import type { PageProps, PDFPageProxy } from 'react-pdf'
 
 import { useViewer } from '../../hooks'
 import { range } from '../../utils'
@@ -18,7 +18,14 @@ const CanvasView = ({
   noData,
 }: CanvasViewProps) => {
   const { numPages, setInView, scale } = useViewer()
+  const [width, setWidth] = useState<number | undefined>(undefined)
   const ref = useRef<HTMLDivElement>(null)
+
+  const handleLoadSuccess = useCallback((page: PDFPageProxy) => {
+    if (ref.current?.clientWidth) {
+      setWidth(Math.min(ref.current?.clientWidth, page.width))
+    }
+  }, [])
 
   return (
     <div ref={ref} className={className}>
@@ -35,6 +42,8 @@ const CanvasView = ({
             error={error}
             loading={loading}
             noData={noData}
+            onLoadSuccess={handleLoadSuccess}
+            width={width}
           />
         ))}
     </div>

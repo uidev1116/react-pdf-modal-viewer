@@ -2,7 +2,7 @@ import { isValidElement } from 'react'
 import { useViewer } from '../../hooks'
 
 import type { ReactNode } from 'react'
-import { Meta as MetaType } from '../../types/meta'
+import type { Meta as MetaType } from '../../types/meta'
 
 export interface MetaProps {
   className?: string

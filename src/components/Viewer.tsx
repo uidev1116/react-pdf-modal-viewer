@@ -67,6 +67,8 @@ const Viewer = ({
   options = {},
   children,
 }: ViewerProps) => {
+  const dialogRef = useRef<HTMLDivElement | null>(null)
+
   const {
     setRef: setBodyScrollLockRef,
     disableScroll,
@@ -86,7 +88,8 @@ const Viewer = ({
   })
 
   const setRefs = useCallback(
-    (node: HTMLElement | null) => {
+    (node: HTMLDivElement | null) => {
+      dialogRef.current = node
       setBodyScrollLockRef(node)
       setTrapRef(node)
       setAriaHiddenRef(node)
@@ -169,7 +172,19 @@ const Viewer = ({
   useEffect(() => {
     if (modalState.afterOpen) {
       if (preventScroll) {
-        disableScroll()
+        disableScroll({
+          allowTouchMove(el) {
+            let element: Element | HTMLElement | null = el
+            while (element && element !== document.body) {
+              if (dialogRef.current && element === dialogRef.current) {
+                return true
+              }
+
+              element = element.parentElement
+            }
+            return false
+          },
+        })
       }
       activate()
       hide()
