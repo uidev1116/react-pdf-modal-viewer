@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { Document, pdfjs } from 'react-pdf'
 
-import { ViewerProvider } from '../providers'
+import { ViewerProvider } from '../stores'
 
 import type { ReactNode } from 'react'
 import type { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api'
