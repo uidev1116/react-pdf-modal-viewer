@@ -25,7 +25,7 @@ export default defineConfig({
     react(),
     eslint({
       extensions: ['js', 'ts', 'tsx'],
-      exclude: ['/node_modules/'],
+      exclude: ['**/node_modules/**'],
       emitError: true,
       emitWarning: true,
       failOnError: false,

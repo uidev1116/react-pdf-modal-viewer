@@ -44,10 +44,10 @@ export interface ViewerProps
 
 const Viewer = ({
   isOpen,
-  onClose = () => {},
+  onClose,
   container = document.body,
-  onAfterOpen = () => {},
-  onAfterClose = () => {},
+  onAfterOpen,
+  onAfterClose,
   shouldCloseOnBackdropClick = true,
   shouldCloseOnEsc = true,
   id,
@@ -101,6 +101,18 @@ const Viewer = ({
     onClose()
   }, [onClose])
 
+  const afterOpen = useCallback(() => {
+    if (onAfterOpen) {
+      onAfterOpen()
+    }
+  }, [onAfterOpen])
+
+  const afterClose = useCallback(() => {
+    if (onAfterClose) {
+      onAfterClose()
+    }
+  }, [onAfterClose])
+
   const isFirstMount = useFirstMountState()
   const [modalState, setModalState] = useState({
     isOpen: false,
@@ -111,10 +123,10 @@ const Viewer = ({
   useEffect(() => {
     if (isOpen) {
       setModalState((prevState) => ({ ...prevState, isOpen: true }))
-    } else if (!isFirstMount) {
+    } else if (!isFirstMount && modalState.isOpen) {
       setModalState((prevState) => ({ ...prevState, beforeClose: true }))
     }
-  }, [isOpen, isFirstMount])
+  }, [isOpen, modalState.isOpen, isFirstMount])
 
   useEffect(() => {
     let animationFrame: number
@@ -122,15 +134,9 @@ const Viewer = ({
       animationFrame = window.requestAnimationFrame(() => {
         setModalState((prevState) => ({ ...prevState, afterOpen: true }))
         if (isOpen) {
-          onAfterOpen()
+          afterOpen()
         }
       })
-    } else if (!isFirstMount) {
-      if (preventScroll) {
-        enableScroll()
-      }
-      deactivate()
-      unhide()
     }
 
     return () => {
@@ -138,16 +144,7 @@ const Viewer = ({
         cancelAnimationFrame(animationFrame)
       }
     }
-  }, [
-    modalState.isOpen,
-    isOpen,
-    onAfterOpen,
-    isFirstMount,
-    preventScroll,
-    enableScroll,
-    deactivate,
-    unhide,
-  ])
+  }, [modalState.isOpen, isOpen, afterOpen])
 
   useEffect(() => {
     let timeoutId: number
@@ -158,7 +155,12 @@ const Viewer = ({
           beforeClose: false,
           afterOpen: false,
         })
-        onAfterClose()
+        if (preventScroll) {
+          enableScroll()
+        }
+        deactivate()
+        unhide()
+        afterClose()
       }, closeTimeout)
     }
 
@@ -167,13 +169,22 @@ const Viewer = ({
         clearTimeout(timeoutId)
       }
     }
-  }, [modalState.beforeClose, onAfterClose, closeTimeout])
+  }, [
+    modalState.beforeClose,
+    afterClose,
+    closeTimeout,
+    preventScroll,
+    enableScroll,
+    deactivate,
+    unhide,
+  ])
 
   useEffect(() => {
-    if (modalState.afterOpen) {
+    if (modalState.afterOpen && modalState.isOpen) {
       if (preventScroll) {
         disableScroll({
           allowTouchMove(el) {
+            // モーダルの内部はスクロールを許可する
             let element: Element | HTMLElement | null = el
             while (element && element !== document.body) {
               if (dialogRef.current && element === dialogRef.current) {
@@ -189,7 +200,14 @@ const Viewer = ({
       activate()
       hide()
     }
-  }, [modalState.afterOpen, preventScroll, disableScroll, activate, hide])
+  }, [
+    modalState.afterOpen,
+    modalState.isOpen,
+    preventScroll,
+    disableScroll,
+    activate,
+    hide,
+  ])
 
   const handleClick = useCallback(() => {
     close()
@@ -221,14 +239,13 @@ const Viewer = ({
   )
 
   const buildClassName = (): string => {
-    const { afterOpen, beforeClose } = modalState
     let result = className
 
-    if (afterOpen) {
+    if (modalState.afterOpen) {
       result = `${className} ${className}--after-open`
     }
 
-    if (beforeClose) {
+    if (modalState.beforeClose) {
       result = `${className} ${className}--before-close`
     }
 
