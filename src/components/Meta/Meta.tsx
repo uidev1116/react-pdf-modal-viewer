@@ -9,7 +9,7 @@ export interface MetaProps {
   custom?: (meta: MetaType) => ReactNode
 }
 
-const Meta = ({ className = 'pdf-viewer__meta', custom }: MetaProps) => {
+const Meta = ({ className = 'pdf-modal-viewer__meta', custom }: MetaProps) => {
   const { meta } = useViewer()
 
   const renderFileSize = () => {

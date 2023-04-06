@@ -1,30 +1,40 @@
 {
-  "name": "react-pdf-viewer",
+  "name": "react-pdf-modal-viewer",
   "version": "0.0.0",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "css",
+    "scss",
+    "types"
   ],
-  "main": "./dist/react-pdf-viewer.umd.js",
-  "module": "./dist/react-pdf-viewer.js",
+  "main": "./dist/react-pdf-modal-viewer.umd.js",
+  "module": "./dist/react-pdf-modal-viewer.js",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/react-pdf-viewer.js",
-      "require": "./dist/react-pdf-viewer.umd.js"
-    }
+      "import": "./dist/react-pdf-modal-viewer.js",
+      "require": "./dist/react-pdf-modal-viewer.umd.js"
+    },
+    "./css": "./css/vue-minimal-modal.css",
+    "./scss": "./scss/vue-minimal-modal.scss"
   },
   "scripts": {
     "dev": "vite --host",
     "build": "npm run build:js && npm run build:css",
     "build:js": "tsc && vite build",
-    "build:scss": "sass --no-source-map --style=compressed scss/viewer.scss:css/pdf-viewer.css",
+    "build:scss": "sass --no-source-map --style=compressed scss/pdf-modal-viewer.scss:css/pdf-modal-viewer.css",
     "build:postcss": "postcss css/*.css -r",
     "build:css": "npm run build:scss && npm run build:postcss",
+    "release:commit": "node ./scripts/commit.js",
+    "release:patch": "npm version patch --no-git-tag-version && npm run release:commit",
+    "release:minor": "npm version minor --no-git-tag-version && npm run release:commit",
+    "release:major": "npm version mejor --no-git-tag-version && npm run release:commit",
     "prepare": "husky install"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/uidev1116/react-pdf-viewer"
+    "url": "https://github.com/uidev1116/react-pdf-modal-viewer"
   },
   "author": "uidev1116",
   "license": "MIT",
@@ -39,6 +49,7 @@
     "@typescript-eslint/parser": "^5.30.6",
     "@vitejs/plugin-react": "^2.0.0",
     "autoprefixer": "^10.4.8",
+    "co": "^4.6.0",
     "eslint": "^8.20.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
@@ -48,6 +59,7 @@
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "node-cmd": "^5.0.0",
     "postcss": "^8.4.16",
     "postcss-cli": "^10.0.0",
     "prettier": "^2.7.1",
@@ -75,5 +87,18 @@
     "focus-trap": "^6.9.4",
     "react-intersection-observer": "^9.4.0",
     "react-pdf": "^5.7.2"
-  }
+  },
+  "tags": [
+    "react",
+    "pdf",
+    "pdf-viewer",
+    "pdf-modal-viewer"
+  ],
+  "keywords": [
+    "react",
+    "react-component",
+    "pdf",
+    "pdf-viewer",
+    "pdf-modal-viewer"
+  ]
 }

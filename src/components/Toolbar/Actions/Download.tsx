@@ -2,7 +2,7 @@ import { useViewer } from '../../../hooks'
 
 import type { ReactNode } from 'react'
 
-interface DownloadProps {
+export interface DownloadProps {
   className?: string
   iconClassName?: string
   ariaLabel?: string
@@ -10,8 +10,8 @@ interface DownloadProps {
 }
 
 const Download = ({
-  className = 'pdf-viewer__download',
-  iconClassName = 'pdf-viewer__icon-download',
+  className = 'pdf-modal-viewer__download',
+  iconClassName = 'pdf-modal-viewer__icon-download',
   ariaLabel = 'Download PDF',
   children,
 }: DownloadProps) => {

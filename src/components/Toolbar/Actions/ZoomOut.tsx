@@ -3,7 +3,7 @@ import { useViewer } from '../../../hooks'
 
 import type { ReactNode } from 'react'
 
-interface ZoomOutProps {
+export interface ZoomOutProps {
   className?: string
   iconClassName?: string
   ariaLabel?: string
@@ -13,8 +13,8 @@ interface ZoomOutProps {
 }
 
 const ZoomOut = ({
-  className = 'pdf-viewer__zoom-out',
-  iconClassName = 'pdf-viewer__icon-zoom-out',
+  className = 'pdf-modal-viewer__zoom-out',
+  iconClassName = 'pdf-modal-viewer__icon-zoom-out',
   ariaLabel = 'Zoom out PDF',
   step = 0.1,
   min = 0.1,

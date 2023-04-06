@@ -11,8 +11,8 @@ export interface ToolbarProps {
 }
 
 const Toolbar = ({
-  className = 'pdf-viewer__toolbar',
-  actionClassName = 'pdf-viewer__action',
+  className = 'pdf-modal-viewer__toolbar',
+  actionClassName = 'pdf-modal-viewer__action',
   children,
 }: ToolbarProps) => (
   <div className={className}>
@@ -25,8 +25,8 @@ const Toolbar = ({
   </div>
 )
 
-Toolbar.Download = Download
-Toolbar.ZoomIn = ZoomIn
-Toolbar.ZoomOut = ZoomOut
-
-export default Toolbar
+export default Object.assign(Toolbar, {
+  Download,
+  ZoomIn,
+  ZoomOut,
+})

@@ -10,7 +10,7 @@ export interface ThumbnailViewProps
 }
 
 const ThumbnailView = ({
-  className = 'pdf-viewer__thumbnail',
+  className = 'pdf-modal-viewer__thumbnail',
   error,
   loading,
   noData,

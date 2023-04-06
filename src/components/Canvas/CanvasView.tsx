@@ -12,7 +12,7 @@ export interface CanvasViewProps
 }
 
 const CanvasView = ({
-  className = 'pdf-viewer__canvas',
+  className = 'pdf-modal-viewer__canvas',
   error,
   loading,
   noData,

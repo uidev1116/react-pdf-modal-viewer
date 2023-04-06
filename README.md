@@ -1,1 +1,1 @@
-# react-pdf-viewer
+# react-pdf-modal-viewer

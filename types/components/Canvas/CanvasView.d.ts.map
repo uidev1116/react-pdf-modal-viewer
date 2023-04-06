@@ -1,0 +1,1 @@
+{"version":3,"file":"CanvasView.d.ts","sourceRoot":"","sources":["../../../src/components/Canvas/CanvasView.tsx"],"names":[],"mappings":";AAEA,OAAO,KAAK,EAAE,SAAS,EAAgB,MAAM,WAAW,CAAA;AAMxD,MAAM,WAAW,eACf,SAAQ,IAAI,CAAC,SAAS,EAAE,OAAO,GAAG,SAAS,GAAG,QAAQ,CAAC;IACvD,SAAS,CAAC,EAAE,MAAM,CAAA;CACnB;AAED,QAAA,MAAM,UAAU,2CAKb,eAAe,gBAgCjB,CAAA;AAED,eAAe,UAAU,CAAA"}

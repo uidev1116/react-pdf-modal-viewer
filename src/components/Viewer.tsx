@@ -4,8 +4,8 @@ import { createPortal } from 'react-dom'
 import ViewerCore from './ViewerCore'
 import { Canvas } from './Canvas' // eslint-disable-line
 import { Thumbnail } from './Thumbnail'
-import { Toolbar } from './Toolbar'
 import { Meta } from './Meta'
+import { Toolbar } from './Toolbar'
 
 import {
   useBodyScrollLock,
@@ -51,11 +51,11 @@ const Viewer = ({
   shouldCloseOnBackdropClick = true,
   shouldCloseOnEsc = true,
   id,
-  className = 'pdf-viewer',
-  backdropClassName = 'pdf-viewer__backdrop',
-  dialogClassName = 'pdf-viewer__dialog',
-  bodyClassName = 'pdf-viewer__body',
-  closeButtonClassName = 'pdf-viewer__close-btn',
+  className = 'pdf-modal-viewer',
+  backdropClassName = 'pdf-modal-viewer__backdrop',
+  dialogClassName = 'pdf-modal-viewer__dialog',
+  bodyClassName = 'pdf-modal-viewer__body',
+  closeButtonClassName = 'pdf-modal-viewer__close-btn',
   error,
   loading,
   noData,
@@ -296,9 +296,9 @@ const Viewer = ({
   )
 }
 
-Viewer.Canvas = Canvas
-Viewer.Thumbnail = Thumbnail
-Viewer.Meta = Meta
-Viewer.Toolbar = Toolbar
-
-export default Viewer
+export default Object.assign(Viewer, {
+  Canvas,
+  Thumbnail,
+  Meta,
+  Toolbar,
+})
