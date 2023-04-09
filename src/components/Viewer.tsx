@@ -13,7 +13,6 @@ import {
   useFirstMountState,
 } from '../hooks'
 
-import type { ReactNode, MouseEvent, KeyboardEvent } from 'react'
 import type { DocumentProps } from 'react-pdf'
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api'
 
@@ -38,7 +37,7 @@ export interface ViewerProps
   role?: string
   ariaModal?: boolean | 'false' | 'true'
   options?: DocumentInitParameters
-  children?: ReactNode
+  children?: React.ReactNode
 }
 
 const Viewer = ({
@@ -215,7 +214,7 @@ const Viewer = ({
   const backdropRef = useRef<HTMLDivElement>(null)
 
   const handleBackdropClick = useCallback(
-    (event: MouseEvent) => {
+    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (event.target !== backdropRef.current) {
         // 内側をクリックした場合は何もしない
         return
@@ -228,7 +227,7 @@ const Viewer = ({
   )
 
   const handleKeydown = useCallback(
-    (event: KeyboardEvent) => {
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (shouldCloseOnEsc && event.code === 'Escape') {
         event.stopPropagation()
         close()

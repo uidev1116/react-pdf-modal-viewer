@@ -1,12 +1,10 @@
 import { useViewer } from '../../../hooks'
 
-import type { ReactNode } from 'react'
-
 export interface DownloadProps {
   className?: string
   iconClassName?: string
   ariaLabel?: string
-  children?: ReactNode
+  children?: React.ReactNode
 }
 
 const Download = ({

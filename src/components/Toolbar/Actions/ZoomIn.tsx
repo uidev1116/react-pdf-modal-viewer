@@ -1,15 +1,13 @@
 import { useCallback } from 'react'
 import { useViewer } from '../../../hooks'
 
-import type { ReactNode } from 'react'
-
 export interface ZoomInProps {
   className?: string
   iconClassName?: string
   ariaLabel?: string
   step?: number
   max?: number
-  children?: ReactNode
+  children?: React.ReactNode
 }
 
 const ZoomIn = ({

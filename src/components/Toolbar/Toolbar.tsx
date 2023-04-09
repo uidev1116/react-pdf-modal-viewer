@@ -2,12 +2,10 @@ import { Download, ZoomIn, ZoomOut } from './Actions'
 
 import { Children, cloneElement, isValidElement } from 'react'
 
-import type { ReactNode } from 'react'
-
 export interface ToolbarProps {
   className?: string
   actionClassName?: string
-  children?: ReactNode
+  children?: React.ReactNode
 }
 
 const Toolbar = ({

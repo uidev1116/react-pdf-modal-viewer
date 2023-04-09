@@ -1,12 +1,11 @@
 import { isValidElement } from 'react'
 import { useViewer } from '../../hooks'
 
-import type { ReactNode } from 'react'
 import type { Meta as MetaType } from '../../types/meta'
 
 export interface MetaProps {
   className?: string
-  custom?: (meta: MetaType) => ReactNode
+  custom?: (meta: MetaType) => React.ReactNode
 }
 
 const Meta = ({ className = 'pdf-modal-viewer__meta', custom }: MetaProps) => {

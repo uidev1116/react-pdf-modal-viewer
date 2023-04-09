@@ -3,7 +3,6 @@ import { Document, pdfjs } from 'react-pdf'
 
 import { ViewerProvider } from '../stores'
 
-import type { ReactNode } from 'react'
 import type { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api'
 
 import type { ViewerProps } from './Viewer'
@@ -15,7 +14,7 @@ export interface ViewerCoreProps
     'file' | 'options' | 'error' | 'loading' | 'noData'
   > {
   className: string
-  children?: ReactNode
+  children?: React.ReactNode
 }
 
 const ViewerCore = ({
