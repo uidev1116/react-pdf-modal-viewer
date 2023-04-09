@@ -1,4 +1,4 @@
 import { pdfjs } from 'react-pdf'
-import { Viewer } from './components'
+import { Viewer, Toolbar } from './components'
 
-export { pdfjs, Viewer }
+export { pdfjs, Viewer, Toolbar }

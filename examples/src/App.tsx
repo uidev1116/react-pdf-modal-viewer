@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Viewer, pdfjs } from '../../src'
+import { Viewer, Toolbar, pdfjs } from '../../src'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.js`
 
@@ -53,11 +53,11 @@ const App = () => {
         <Viewer.Meta />
         <Viewer.Thumbnail />
         <Viewer.Canvas />
-        <Viewer.Toolbar>
-          <Viewer.Toolbar.ZoomIn />
-          <Viewer.Toolbar.ZoomOut />
-          <Viewer.Toolbar.Download />
-        </Viewer.Toolbar>
+        <Toolbar>
+          <Toolbar.ZoomIn />
+          <Toolbar.ZoomOut />
+          <Toolbar.Download />
+        </Toolbar>
       </Viewer>
       <button type="button" className="btn btn-primary">
         FocusTrapテスト

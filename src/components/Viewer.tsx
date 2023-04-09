@@ -5,7 +5,6 @@ import ViewerCore from './ViewerCore'
 import { Canvas } from './Canvas' // eslint-disable-line
 import { Thumbnail } from './Thumbnail'
 import { Meta } from './Meta'
-import { Toolbar } from './Toolbar'
 
 import {
   useBodyScrollLock,
@@ -300,5 +299,4 @@ export default Object.assign(Viewer, {
   Canvas,
   Thumbnail,
   Meta,
-  Toolbar,
 })
