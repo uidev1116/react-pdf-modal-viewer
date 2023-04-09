@@ -8,7 +8,7 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'airbnb',
     'airbnb/hooks',
-    'prettier'
+    'prettier',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -58,11 +58,11 @@ module.exports = {
   },
   overrides: [
     {
-      files: ["src/hooks/**/*.ts"],
+      files: ['src/hooks/**/*.ts'],
       rules: {
-        "import/prefer-default-export": 'off'
-      }
-    }
+        'import/prefer-default-export': 'off',
+      },
+    },
   ],
   settings: {
     'import/resolver': {

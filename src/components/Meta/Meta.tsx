@@ -1,6 +1,7 @@
 import { isValidElement } from 'react'
 import { useViewer } from '../../hooks'
 
+import type React from 'react'
 import type { Meta as MetaType } from '../../types/meta'
 
 export interface MetaProps {

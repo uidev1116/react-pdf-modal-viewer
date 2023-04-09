@@ -1,6 +1,8 @@
 import { useCallback } from 'react'
 import { useViewer } from '../../../hooks'
 
+import type React from 'react'
+
 export interface ZoomInProps {
   className?: string
   iconClassName?: string

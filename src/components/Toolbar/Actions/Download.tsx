@@ -1,5 +1,7 @@
 import { useViewer } from '../../../hooks'
 
+import type React from 'react'
+
 export interface DownloadProps {
   className?: string
   iconClassName?: string

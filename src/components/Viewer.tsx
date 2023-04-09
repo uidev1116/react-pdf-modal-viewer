@@ -13,6 +13,7 @@ import {
   useFirstMountState,
 } from '../hooks'
 
+import type React from 'react'
 import type { DocumentProps } from 'react-pdf'
 import type { DocumentInitParameters } from 'pdfjs-dist/types/src/display/api'
 

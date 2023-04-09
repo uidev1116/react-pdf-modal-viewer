@@ -3,6 +3,7 @@ import { Document, pdfjs } from 'react-pdf'
 
 import { ViewerProvider } from '../stores'
 
+import type React from 'react'
 import type { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api'
 
 import type { ViewerProps } from './Viewer'
